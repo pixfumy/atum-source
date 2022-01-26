@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "atum",
-  "version": "1.0.0",
+  "version": "${version}",
   "name": "Atum",
   "description": "Mod to automatically reset RSG and SSG",
   "authors": [
