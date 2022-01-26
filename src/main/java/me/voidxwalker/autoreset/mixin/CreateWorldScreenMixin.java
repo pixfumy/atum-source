@@ -4,12 +4,17 @@ import me.voidxwalker.autoreset.Main;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.world.Difficulty;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.io.IOException;
+import java.util.Random;
 
 
 @Mixin(CreateWorldScreen.class)
@@ -18,39 +23,38 @@ public abstract class CreateWorldScreenMixin {
     @Shadow private TextFieldWidget levelNameField;
     @Shadow protected abstract void createLevel();
 
-    @Shadow private Difficulty currentDifficulty;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
         if (Main.isRunning) {
-            Difficulty difficulty;
-            switch (Main.difficulty) {
-                case 0 :
-                    difficulty = Difficulty.PEACEFUL;
-                    break;
-                case 1 :
-                    difficulty = Difficulty.EASY;
-                    break;
-                case 2 :
-                    difficulty = Difficulty.NORMAL;
-                    break;
-                case 3 :
-                    difficulty = Difficulty.HARD;
-                    break;
-                case 4 :
-                    difficulty = Difficulty.HARD;
-                    hardcore = true;
-                    break;
-                default :
-                    Main.log(Level.WARN, "Invalid difficulty");
-                    difficulty = Difficulty.EASY;
-                    break;
-
+            if(Main.isHardcore){
+                hardcore=true;
             }
-            currentDifficulty = difficulty;
             levelNameField.setText((Main.seed==null||Main.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Main.getNextAttempt());
 
+            Main.loopPrevent=true;
             createLevel();
         }
+    }
+    @Redirect(method = "createLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;getText()Ljava/lang/String;"))
+    private String injected(TextFieldWidget instance) {
+        if(!Main.isRunning){
+            return instance.getText();
+        }
+        long l = (new Random()).nextLong();
+        String string = Main.seed==null?"":Main.seed;
+        if (!StringUtils.isEmpty(string)) {
+            try {
+                long m = Long.parseLong(string);
+                if (m != 0L) {
+                    l = m;
+                }
+            } catch (NumberFormatException var6) {
+                l = string.hashCode();
+            }
+        }
+
+        Main.log(Level.INFO,(Main.seed==null||Main.seed.isEmpty()?"Resetting a random seed":"Resetting the set seed"+"\""+l+"\""));
+        return ""+l;
     }
 }

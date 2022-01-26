@@ -2,16 +2,13 @@
   "required": true,
   "minVersion": "0.8",
   "package": "me.voidxwalker.autoreset.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "OptionsScreenMixin",
-    "MoreOptionsDialogMixin",
     "CreateWorldScreenMixin",
-    "TitleScreenMixin",
+    "DebugHudMixin",
     "LevelLoadingScreenMixin",
-    "DebugHudMixin"
-  ],
-  "client": [
+    "SettingsScreenMixin",
+    "TitleScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
