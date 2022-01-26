@@ -5,11 +5,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
-import net.minecraft.client.gui.screen.LevelLoadingScreen;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Language;
+import net.minecraft.client.gui.screen.ProgressScreen;
+import net.minecraft.client.render.LoadingScreenRenderer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,12 +18,11 @@ import java.util.Scanner;
 
 public class Main implements ModInitializer {
     private static final ModContainer mod = FabricLoader.getInstance().getModContainer("atum").orElseThrow(NullPointerException::new);
-    public static String MOD_VERSION = mod.getMetadata().getVersion().getFriendlyString();
     public static String MOD_NAME = mod.getMetadata().getName();
     public static String seed;
     public static boolean isRunning = false;
     public static Logger LOGGER = LogManager.getLogger();
-    public static boolean loopPrevent = false;
+    public static boolean loopPrevent2 = true;
     public static boolean isHardcore=false;
 
     public static void log(Level level, String message) {
@@ -58,13 +54,7 @@ public class Main implements ModInitializer {
             return -1;
         }
     }
-    public static Text getTranslation(String path, String text){
-        if (Language.getInstance().translate(path).equals(path)) {
-            return  new LiteralText(text);
-        } else {
-            return new TranslatableText(path);
-        }
-    }
+
     public static void saveDifficulty() {
         try {
             File file = new File("arhardcore.txt");
@@ -110,18 +100,17 @@ public class Main implements ModInitializer {
             }
             scanner.close();
 
+
         } catch (Exception exception) {
             log(Level.ERROR, "Could not load Seed for Auto Reset:\n" + exception.getMessage());
         }
     }
     @Override
     public void onInitialize() {
-        if(!((Pingable)(new LevelLoadingScreen(null))).ping()){
+
+       /* if(!((Pingable)(new DebugHud(MinecraftClient.getInstance()))).ping()){
             throw new IllegalStateException();
-        }
-        if(!((Pingable)(new DebugHud(MinecraftClient.getInstance()))).ping()){
-            throw new IllegalStateException();
-        }
+        }*/
         log(Level.INFO, "Initializing");
         File difficultyFile = new File("arhardcore.txt");
         if (!difficultyFile.exists()) {

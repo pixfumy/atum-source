@@ -6,7 +6,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,51 +14,48 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(TitleScreen.class)
-public class TitleScreenMixin extends Screen {
-    private ButtonWidget resetButton;
-    private Text difficulty;
-    private static final Identifier BUTTON_IMAGE = new Identifier("textures/item/golden_boots.png");
+public abstract class TitleScreenMixin extends Screen {
+    private String difficulty;
+    private static final Identifier BUTTON_IMAGE = new Identifier("textures/items/gold_boots.png");
 
-    protected TitleScreenMixin(Text title) {
-        super(title);
-    }
+
 
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo info) {
-        if (Main.isRunning) {
-            if (Main.loopPrevent) {
-                Main.loopPrevent = false;
-            } else {
-                minecraft.openScreen(new CreateWorldScreen(this));
-            }
+        if (Main.isRunning&&Main.loopPrevent2) {
+            Main.loopPrevent2=false;
+            client.openScreen(new CreateWorldScreen(this));
         } else {
-            resetButton = this.addButton(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, "", (buttonWidget) -> {
-                if (hasShiftDown()) {
-                    minecraft.openScreen(new AutoResetOptionScreen(this));
-                } else {
-                    Main.isRunning = true;
-                    this.minecraft.openScreen(this);
-                }
-            }));
+            this.buttons.add(new ButtonWidget(69,this.width / 2 - 124, this.height / 4 + 48, 20, 20, ""));
         }
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     private void goldBootsOverlay(int mouseX, int mouseY, float delta, CallbackInfo ci) {
         getDifficulty();
-        this.minecraft.getTextureManager().bindTexture(BUTTON_IMAGE);
-        blit(this.width / 2 - 124+2, this.height / 4 + 48+2, 0.0F, 0.0F, 16, 16, 16, 16);
-        if (resetButton.isHovered() && hasShiftDown()) {
-            drawCenteredString(minecraft.textRenderer, difficulty.asString(), this.width / 2 - 124+11, this.height / 4 + 48-15, 16777215);
+        this.client.getTextureManager().bindTexture(BUTTON_IMAGE);
+        drawTexture(this.width / 2 - 124+2, this.height / 4 + 48+2, 0.0F, 0.0F, 16, 16, 16, 16);
+        if (mouseX> this.width / 2 - 124&&mouseX<this.width / 2 - 124+20&&mouseY>this.height / 4 + 48&&mouseY< this.height / 4 + 48+20&&hasShiftDown()) {
+            drawCenteredString(client.textRenderer, difficulty, this.width / 2 - 124+11, this.height / 4 + 48-15, 16777215);
         }
     }
-
+    @Inject(at = @At("RETURN"), method = "buttonClicked")
+    private void buttonCheck(ButtonWidget button, CallbackInfo info) {
+        if (button.id == 69) {
+            if (hasShiftDown()) {
+                client.openScreen(new AutoResetOptionScreen(this));
+            } else {
+                Main.isRunning = true;
+                this.client.openScreen(this);
+            }
+        }
+    }
     private void getDifficulty() {
         if(Main.isHardcore) {
-            difficulty = Main.getTranslation("menu.autoreset.hardcore-on","Hardcore: ON");
+            difficulty = "Hardcore: ON";
         }
         else {
-            difficulty = Main.getTranslation("menu.autoreset.hardcore-off","Hardcore: OFF");
+            difficulty ="Hardcore: OFF";
         }
 
     }

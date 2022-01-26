@@ -6,9 +6,10 @@
   "mixins": [
     "CreateWorldScreenMixin",
     "DebugHudMixin",
-    "LevelLoadingScreenMixin",
+    "LoadingScreenRendererMixin",
     "SettingsScreenMixin",
-    "TitleScreenMixin"
+    "TitleScreenMixin",
+    "ServerPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
