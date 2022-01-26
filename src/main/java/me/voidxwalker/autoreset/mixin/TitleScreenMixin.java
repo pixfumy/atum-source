@@ -30,14 +30,14 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo info) {
         if (Main.isRunning) {
-            client.openScreen(new CreateWorldScreen(this));
+            client.setScreen(CreateWorldScreen.create(this));
         } else {
-            resetButton = this.addButton(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, new LiteralText(""), (buttonWidget) -> {
+            resetButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, new LiteralText(""), (buttonWidget) -> {
                 if (hasShiftDown()) {
-                    client.openScreen(new AutoResetOptionScreen(this));
+                    client.setScreen(new AutoResetOptionScreen(this));
                 } else {
                     Main.isRunning = true;
-                    this.client.openScreen(this);
+                    this.client.setScreen(this);
                 }
             }));
         }
@@ -46,7 +46,7 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "render", at = @At("TAIL"))
     private void goldBootsOverlay(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         getDifficulty();
-        this.client.getTextureManager().bindTexture(BUTTON_IMAGE);
+        RenderSystem.setShaderTexture(0, BUTTON_IMAGE);
         drawTexture(matrices, this.width / 2 - 124+2, this.height / 4 + 48+2, 0.0F, 0.0F, 16, 16, 16, 16);
         if (resetButton.isHovered() && hasShiftDown()) {
             drawCenteredText(matrices, textRenderer, difficulty, this.width / 2 - 124+11, this.height / 4 + 48-15, 16777215);
@@ -55,21 +55,11 @@ public class TitleScreenMixin extends Screen {
 
     private void getDifficulty() {
         switch (Main.difficulty) {
-            case 0 :
-                difficulty = Main.getTranslation("menu.peaceful", "Peaceful");
-                break;
-            case 1 :
-                difficulty = Main.getTranslation("menu.easy", "Easy");
-                break;
-            case 2 :
-                difficulty = Main.getTranslation("menu.normal", "Normal");
-                break;
-            case 3 :
-                difficulty = Main.getTranslation("menu.hard", "Hard");
-                break;
-            case 4 :
-                difficulty = Main.getTranslation("menu.hardcore", "Hardcore");
-                break;
+            case 0 -> difficulty = Main.getTranslation("menu.peaceful", "Peaceful");
+            case 1 -> difficulty = Main.getTranslation("menu.easy", "Easy");
+            case 2 -> difficulty = Main.getTranslation("menu.normal", "Normal");
+            case 3 -> difficulty = Main.getTranslation("menu.hard", "Hard");
+            case 4 -> difficulty = Main.getTranslation("menu.hardcore", "Hardcore");
         }
     }
 }

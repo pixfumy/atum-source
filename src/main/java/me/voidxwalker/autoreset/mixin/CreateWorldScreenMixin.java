@@ -18,38 +18,27 @@ public abstract class CreateWorldScreenMixin {
     @Shadow private TextFieldWidget levelNameField;
     @Shadow protected abstract void createLevel();
 
-    @Shadow private Difficulty field_24289;
-    @Shadow private Difficulty field_24290;
+    @Shadow private Difficulty currentDifficulty;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
         if (Main.isRunning) {
             Difficulty difficulty;
             switch (Main.difficulty) {
-                case 0 :
-                    difficulty = Difficulty.PEACEFUL;
-                    break;
-                case 1 :
-                    difficulty = Difficulty.EASY;
-                    break;
-                case 2 :
-                    difficulty = Difficulty.NORMAL;
-                    break;
-                case 3 :
-                    difficulty = Difficulty.HARD;
-                    break;
-                case 4 :
+                case 0 -> difficulty = Difficulty.PEACEFUL;
+                case 1 -> difficulty = Difficulty.EASY;
+                case 2 -> difficulty = Difficulty.NORMAL;
+                case 3 -> difficulty = Difficulty.HARD;
+                case 4 -> {
                     difficulty = Difficulty.HARD;
                     hardcore = true;
-                    break;
-                default :
+                }
+                default -> {
                     Main.log(Level.WARN, "Invalid difficulty");
                     difficulty = Difficulty.EASY;
-                    break;
-
+                }
             }
-            field_24289=difficulty;
-            field_24290=difficulty;
+            currentDifficulty = difficulty;
             levelNameField.setText((Main.seed==null||Main.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Main.getNextAttempt());
 
             createLevel();
