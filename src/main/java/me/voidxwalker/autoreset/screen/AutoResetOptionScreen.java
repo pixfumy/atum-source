@@ -23,33 +23,34 @@ public class AutoResetOptionScreen extends Screen{
     }
 
     protected void init() {
-        this.client.keyboard.enableRepeatEvents(true);
+        this.client.keyboard.setRepeatEvents(true);
         setDifficulty();
         this.seedField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Main.getTranslation("menu.enterSeed","Enter a Seed")) {};
         this.seedField.setText(seed==null?"":seed);
         this.seedField.setChangedListener((string) -> this.seed = string);
-        difficultyButton=this.addButton(new ButtonWidget(this.width / 2 - 75, this.height-100, 150, 20,difficulty , (buttonWidget) -> {
-            Main.difficulty= Main.difficulty>=4?0: Main.difficulty+1;
+        difficultyButton=this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height-100, 150, 20,difficulty , (buttonWidget) -> {
+
+            Main.difficulty= Main.difficulty==4?0: Main.difficulty+1;
             setDifficulty();
-            buttonWidget.setMessage(difficulty);
+            difficultyButton.setMessage(difficulty);
         }));
-        this.addButton(new ButtonWidget(this.width / 2 - 155, this.height - 28, 150, 20,Main.getTranslation("menu.done","Done") , (buttonWidget) -> {
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 28, 150, 20,Main.getTranslation("menu.done","Done") , (buttonWidget) -> {
             Main.seed=seed;
             Main.saveDifficulty();
             Main.saveSeed();
-            this.client.openScreen(this.parent);
+            this.client.setScreen(this.parent);
         }));
-        this.addButton(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, ScreenTexts.CANCEL, (buttonWidget) -> this.client.openScreen(this.parent)));
-        this.children.add(this.seedField);
+        this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, ScreenTexts.CANCEL, (buttonWidget) -> this.client.setScreen(this.parent)));
+        this.addSelectableChild(this.seedField);
         this.setInitialFocus(this.seedField);
     }
 
     public void removed() {
-        this.client.keyboard.enableRepeatEvents(false);
+        this.client.keyboard.setRepeatEvents(false);
     }
 
     public void onClose() {
-        this.client.openScreen(this.parent);
+        this.client.setScreen(this.parent);
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

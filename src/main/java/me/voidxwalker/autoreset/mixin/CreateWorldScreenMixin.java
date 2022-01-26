@@ -18,8 +18,7 @@ public abstract class CreateWorldScreenMixin {
     @Shadow private TextFieldWidget levelNameField;
     @Shadow protected abstract void createLevel();
 
-    @Shadow private Difficulty field_24289;
-    @Shadow private Difficulty field_24290;
+    @Shadow private Difficulty currentDifficulty;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
@@ -48,8 +47,7 @@ public abstract class CreateWorldScreenMixin {
                     break;
 
             }
-            field_24289=difficulty;
-            field_24290=difficulty;
+            currentDifficulty = difficulty;
             levelNameField.setText((Main.seed==null||Main.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Main.getNextAttempt());
 
             createLevel();

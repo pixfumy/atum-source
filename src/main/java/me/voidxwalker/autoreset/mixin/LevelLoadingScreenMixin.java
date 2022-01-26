@@ -21,7 +21,7 @@ public class LevelLoadingScreenMixin extends Screen implements Pingable {
     public void modifyString(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci){
         if(Main.isRunning&&Main.seed!=null&&!Main.seed.isEmpty()){
             String string =Main.seed;
-            drawCenteredString(matrices, this.textRenderer, string, this.width / 2, this.height / 2 - 9 / 2 - 50, 16777215);
+            drawCenteredText(matrices, this.textRenderer, string, this.width / 2, this.height / 2 - 9 / 2 - 50, 16777215);
         }
 
     }
