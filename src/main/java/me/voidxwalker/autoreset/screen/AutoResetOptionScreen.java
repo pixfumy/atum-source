@@ -1,6 +1,6 @@
 package me.voidxwalker.autoreset.screen;
 
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -13,30 +13,34 @@ public class AutoResetOptionScreen extends Screen{
     private final Screen parent;
     private TextFieldWidget seedField;
     private String seed;
+    private boolean isHardcore;
     private Text difficulty;
     private  ButtonWidget difficultyButton;
 
     public AutoResetOptionScreen(@Nullable Screen parent) {
-        super(Main.getTranslation("menu.autoresetTitle","Autoreset Options"));
+        super(Atum.getTranslation("menu.autoresetTitle","Autoreset Options"));
         this.parent = parent;
     }
 
     protected void init() {
         this.minecraft.keyboard.enableRepeatEvents(true);
+        this.isHardcore=Atum.isHardcore;
         setDifficulty();
-        this.seedField = new TextFieldWidget(minecraft.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Main.getTranslation("menu.enterSeed","Enter a Seed").asString()) {};
-        this.seedField.setText(seed==null?"":seed);
+        this.seedField = new TextFieldWidget(minecraft.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Atum.getTranslation("menu.enterSeed","Enter a Seed").asString()) {};
+        this.seedField.setText(Atum.seed==null?"":Atum.seed);
+        this.seed=Atum.seed;
         this.seedField.setChangedListener((string) -> this.seed = string);
         difficultyButton=this.addButton(new ButtonWidget(this.width / 2 - 75, this.height-100, 150, 20,difficulty.asString() , (buttonWidget) -> {
 
-            Main.isHardcore=!Main.isHardcore;
+            this.isHardcore=!this.isHardcore;
             setDifficulty();
             difficultyButton.setMessage(difficulty.asString());
         }));
         this.addButton(new ButtonWidget(this.width / 2 - 155, this.height - 28, 150, 20, I18n.translate("gui.done") , (buttonWidget) -> {
-            Main.seed=seed;
-            Main.saveDifficulty();
-            Main.saveSeed();
+            Atum.seed=seed;
+            Atum.isHardcore=this.isHardcore;
+            Atum.saveDifficulty();
+            Atum.saveSeed();
             this.minecraft.openScreen(this.parent);
         }));
         this.addButton(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel"), (buttonWidget) -> this.minecraft.openScreen(this.parent)));
@@ -55,18 +59,18 @@ public class AutoResetOptionScreen extends Screen{
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
         drawCenteredString(minecraft.textRenderer, this.title.asString(), this.width / 2, this.height - 210, -1);
-        drawString( minecraft.textRenderer, Main.getTranslation("menu.enterSeed","Seed (Leave empty for a random Seed)").asString(), this.width / 2 - 100, this.height - 180, -6250336);
+        drawString( minecraft.textRenderer, Atum.getTranslation("menu.enterSeed","Seed (Leave empty for a random Seed)").asString(), this.width / 2 - 100, this.height - 180, -6250336);
 
         this.seedField.render( mouseX, mouseY, delta);
         super.render(mouseX, mouseY, delta);
     }
 
     private void setDifficulty() {
-        if(Main.isHardcore) {
-            difficulty = Main.getTranslation("menu.autoreset.hardcore-on","Hardcore: ON");
+        if(this.isHardcore) {
+            difficulty = Atum.getTranslation("menu.autoreset.hardcore-on","Hardcore: ON");
         }
         else {
-            difficulty = Main.getTranslation("menu.autoreset.hardcore-off","Hardcore: OFF");
+            difficulty = Atum.getTranslation("menu.autoreset.hardcore-off","Hardcore: OFF");
         }
 
     }

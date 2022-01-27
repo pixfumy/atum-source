@@ -1,9 +1,8 @@
 package me.voidxwalker.autoreset.mixin;
 
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.world.Difficulty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.IOException;
 import java.util.Random;
 
 
@@ -26,23 +24,23 @@ public abstract class CreateWorldScreenMixin {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
-        if (Main.isRunning) {
-            if(Main.isHardcore){
+        if (Atum.isRunning) {
+            if(Atum.isHardcore){
                 hardcore=true;
             }
-            levelNameField.setText((Main.seed==null||Main.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Main.getNextAttempt());
+            levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Atum.getNextAttempt());
 
-            Main.loopPrevent=true;
+            Atum.loopPrevent=true;
             createLevel();
         }
     }
     @Redirect(method = "createLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;getText()Ljava/lang/String;"))
     private String injected(TextFieldWidget instance) {
-        if(!Main.isRunning){
+        if(!Atum.isRunning){
             return instance.getText();
         }
         long l = (new Random()).nextLong();
-        String string = Main.seed==null?"":Main.seed;
+        String string = Atum.seed==null?"": Atum.seed;
         if (!StringUtils.isEmpty(string)) {
             try {
                 long m = Long.parseLong(string);
@@ -54,7 +52,7 @@ public abstract class CreateWorldScreenMixin {
             }
         }
 
-        Main.log(Level.INFO,(Main.seed==null||Main.seed.isEmpty()?"Resetting a random seed":"Resetting the set seed"+"\""+l+"\""));
+        Atum.log(Level.INFO,(Atum.seed==null|| Atum.seed.isEmpty()?"Resetting a random seed":"Resetting the set seed"+"\""+l+"\""));
         return ""+l;
     }
 }

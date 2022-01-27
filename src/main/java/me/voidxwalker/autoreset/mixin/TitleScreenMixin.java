@@ -1,6 +1,6 @@
 package me.voidxwalker.autoreset.mixin;
 
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.screen.AutoResetOptionScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -26,9 +26,9 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo info) {
-        if (Main.isRunning) {
-            if (Main.loopPrevent) {
-                Main.loopPrevent = false;
+        if (Atum.isRunning) {
+            if (Atum.loopPrevent) {
+                Atum.loopPrevent = false;
             } else {
                 minecraft.openScreen(new CreateWorldScreen(this));
             }
@@ -37,7 +37,7 @@ public class TitleScreenMixin extends Screen {
                 if (hasShiftDown()) {
                     minecraft.openScreen(new AutoResetOptionScreen(this));
                 } else {
-                    Main.isRunning = true;
+                    Atum.isRunning = true;
                     this.minecraft.openScreen(this);
                 }
             }));
@@ -55,11 +55,11 @@ public class TitleScreenMixin extends Screen {
     }
 
     private void getDifficulty() {
-        if(Main.isHardcore) {
-            difficulty = Main.getTranslation("menu.autoreset.hardcore-on","Hardcore: ON");
+        if(Atum.isHardcore) {
+            difficulty = Atum.getTranslation("menu.autoreset.hardcore-on","Hardcore: ON");
         }
         else {
-            difficulty = Main.getTranslation("menu.autoreset.hardcore-off","Hardcore: OFF");
+            difficulty = Atum.getTranslation("menu.autoreset.hardcore-off","Hardcore: OFF");
         }
 
     }
