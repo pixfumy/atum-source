@@ -1,7 +1,6 @@
 package me.voidxwalker.autoreset.mixin;
 
-import me.voidxwalker.autoreset.Main;
-import net.minecraft.client.gui.screen.GameMenuScreen;
+import me.voidxwalker.autoreset.Atum;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.SettingsScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -22,14 +21,14 @@ public abstract class SettingsScreenMixin extends Screen {
 
     @Inject(method ="init",at = @At("TAIL"))
     public void addAutoResetButton(CallbackInfo ci){
-        if(Main.isRunning){
+        if(Atum.isRunning){
             this.buttons.add(new ButtonWidget(696969,0, this.height - 20, 100, 20,  "Stop Resets & Quit"));
         }
     }
     @Inject(at = @At("RETURN"), method = "buttonClicked")
     private void buttonCheck(ButtonWidget button, CallbackInfo info) {
         if (button.id == 696969) {
-            Main.isRunning=false;
+            Atum.isRunning=false;
             boolean bl = this.client.isIntegratedServerRunning();
             boolean bl2 = this.client.isConnectedToRealms();
             button.active = false;

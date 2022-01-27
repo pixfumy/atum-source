@@ -1,7 +1,7 @@
 package me.voidxwalker.autoreset.mixin;
 
 import com.mojang.authlib.GameProfile;
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
@@ -15,6 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ServerPlayerEntityMixin {
     @Inject(method = "<init>",at=@At("TAIL"))
     private void preventLoop(MinecraftServer server, ServerWorld world, GameProfile profile, ServerPlayerInteractionManager interactionManager, CallbackInfo ci){
-        Main.loopPrevent2=true;
+        Atum.loopPrevent2=true;
     }
 }

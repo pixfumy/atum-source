@@ -16,7 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Main implements ModInitializer {
+public class Atum implements ModInitializer {
     private static final ModContainer mod = FabricLoader.getInstance().getModContainer("atum").orElseThrow(NullPointerException::new);
     public static String MOD_NAME = mod.getMetadata().getName();
     public static String seed;

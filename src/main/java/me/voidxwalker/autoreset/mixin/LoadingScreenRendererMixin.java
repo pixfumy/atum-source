@@ -1,10 +1,8 @@
 package me.voidxwalker.autoreset.mixin;
 
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.Pingable;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ProgressScreen;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.LoadingScreenRenderer;
 import net.minecraft.client.util.Window;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +17,7 @@ public class LoadingScreenRendererMixin implements Pingable {
 
     @Inject(method = "progressStagePercentage", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", shift = At.Shift.AFTER))
     public void modifyString(int percentage, CallbackInfo ci){
-        if(Main.isRunning&&Main.seed!=null&&!Main.seed.isEmpty()){
+        if(Atum.isRunning&& Atum.seed!=null&&!Atum.seed.isEmpty()){
             Window window = new Window(this.field_1029);
             int j = window.getWidth();
             int k = window.getHeight();
