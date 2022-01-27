@@ -1,6 +1,6 @@
 package me.voidxwalker.autoreset.screen;
 
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -18,26 +18,28 @@ public class AutoResetOptionScreen extends Screen{
     private  ButtonWidget difficultyButton;
 
     public AutoResetOptionScreen(@Nullable Screen parent) {
-        super(Main.getTranslation("menu.autoresetTitle","Autoreset Options"));
+        super(Atum.getTranslation("menu.autoresetTitle","Autoreset Options"));
         this.parent = parent;
     }
 
     protected void init() {
         this.client.keyboard.setRepeatEvents(true);
         setDifficulty();
-        this.seedField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Main.getTranslation("menu.enterSeed","Enter a Seed")) {};
-        this.seedField.setText(seed==null?"":seed);
+        this.seedField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Atum.getTranslation("menu.enterSeed","Enter a Seed")) {};
+        this.seedField.setText(Atum.seed==null?"":Atum.seed);
+        this.seed=Atum.seed;
         this.seedField.setChangedListener((string) -> this.seed = string);
+
         difficultyButton=this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height-100, 150, 20,difficulty , (buttonWidget) -> {
 
-            Main.difficulty= Main.difficulty==4?0: Main.difficulty+1;
+            Atum.difficulty= Atum.difficulty==4?0: Atum.difficulty+1;
             setDifficulty();
             difficultyButton.setMessage(difficulty);
         }));
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 28, 150, 20,Main.getTranslation("menu.done","Done") , (buttonWidget) -> {
-            Main.seed=seed;
-            Main.saveDifficulty();
-            Main.saveSeed();
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 28, 150, 20, Atum.getTranslation("menu.done","Done") , (buttonWidget) -> {
+            Atum.seed=seed;
+            Atum.saveDifficulty();
+            Atum.saveSeed();
             this.client.setScreen(this.parent);
         }));
         this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, ScreenTexts.CANCEL, (buttonWidget) -> this.client.setScreen(this.parent)));
@@ -56,31 +58,31 @@ public class AutoResetOptionScreen extends Screen{
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, this.height - 210, -1);
-        drawStringWithShadow(matrices, this.textRenderer, Main.getTranslation("menu.enterSeed","Seed (Leave empty for a random Seed)").asString(), this.width / 2 - 100, this.height - 180, -6250336);
+        drawStringWithShadow(matrices, this.textRenderer, Atum.getTranslation("menu.enterSeed","Seed (Leave empty for a random Seed)").asString(), this.width / 2 - 100, this.height - 180, -6250336);
 
         this.seedField.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
     }
 
     private void setDifficulty() {
-        switch (Main.difficulty) {
+        switch (Atum.difficulty) {
             case 0 :
-                difficulty = Main.getTranslation("menu.autoreset.peaceful", "Peaceful");
+                difficulty = Atum.getTranslation("menu.autoreset.peaceful", "Peaceful");
                 break;
             case 1 :
-                difficulty = Main.getTranslation("menu.autoreset.easy", "Easy");
+                difficulty = Atum.getTranslation("menu.autoreset.easy", "Easy");
                 break;
             case 2 :
-                difficulty = Main.getTranslation("menu.autoreset.normal", "Normal");
+                difficulty = Atum.getTranslation("menu.autoreset.normal", "Normal");
                 break;
             case 3 :
-                difficulty = Main.getTranslation("menu.autoreset.hard", "Hard");
+                difficulty = Atum.getTranslation("menu.autoreset.hard", "Hard");
                 break;
             case 4 :
-                difficulty = Main.getTranslation("menu.autoreset.hardcore", "Hardcore");
+                difficulty = Atum.getTranslation("menu.autoreset.hardcore", "Hardcore");
                 break;
             default:
-                difficulty = Main.getTranslation("menu.autoreset.easy", "Easy");
+                difficulty = Atum.getTranslation("menu.autoreset.easy", "Easy");
                 break;
         }
     }

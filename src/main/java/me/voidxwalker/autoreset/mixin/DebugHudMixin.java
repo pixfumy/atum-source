@@ -1,6 +1,6 @@
 package me.voidxwalker.autoreset.mixin;
 
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.Pingable;
 import net.minecraft.client.gui.hud.DebugHud;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ public class DebugHudMixin implements Pingable {
     )
     private void getRightText(CallbackInfoReturnable<List<String>> info) {
         List<String> returnValue = info.getReturnValue();
-        returnValue.add("Resetting "+(Main.seed==null||Main.seed.isEmpty()?" a random seed":(" the seed: \""+Main.seed+"\"")));
+        returnValue.add("Resetting "+(Atum.seed==null|| Atum.seed.isEmpty()?" a random seed":(" the seed: \""+ Atum.seed+"\"")));
     }
     @Override
     public boolean ping() {
