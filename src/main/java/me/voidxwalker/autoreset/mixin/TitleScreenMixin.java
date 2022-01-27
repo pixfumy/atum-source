@@ -1,7 +1,7 @@
 package me.voidxwalker.autoreset.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.screen.AutoResetOptionScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -29,14 +29,14 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo info) {
-        if (Main.isRunning) {
+        if (Atum.isRunning) {
             client.setScreen(CreateWorldScreen.create(this));
         } else {
             resetButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, new LiteralText(""), (buttonWidget) -> {
                 if (hasShiftDown()) {
                     client.setScreen(new AutoResetOptionScreen(this));
                 } else {
-                    Main.isRunning = true;
+                    Atum.isRunning = true;
                     this.client.setScreen(this);
                 }
             }));
@@ -54,12 +54,12 @@ public class TitleScreenMixin extends Screen {
     }
 
     private void getDifficulty() {
-        switch (Main.difficulty) {
-            case 0 -> difficulty = Main.getTranslation("menu.peaceful", "Peaceful");
-            case 1 -> difficulty = Main.getTranslation("menu.easy", "Easy");
-            case 2 -> difficulty = Main.getTranslation("menu.normal", "Normal");
-            case 3 -> difficulty = Main.getTranslation("menu.hard", "Hard");
-            case 4 -> difficulty = Main.getTranslation("menu.hardcore", "Hardcore");
+        switch (Atum.difficulty) {
+            case 0 -> difficulty = Atum.getTranslation("menu.peaceful", "Peaceful");
+            case 1 -> difficulty = Atum.getTranslation("menu.easy", "Easy");
+            case 2 -> difficulty = Atum.getTranslation("menu.normal", "Normal");
+            case 3 -> difficulty = Atum.getTranslation("menu.hard", "Hard");
+            case 4 -> difficulty = Atum.getTranslation("menu.hardcore", "Hardcore");
         }
     }
 }

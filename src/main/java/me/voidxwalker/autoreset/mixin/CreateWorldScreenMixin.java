@@ -1,6 +1,6 @@
 package me.voidxwalker.autoreset.mixin;
 
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.world.Difficulty;
@@ -22,9 +22,9 @@ public abstract class CreateWorldScreenMixin {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
-        if (Main.isRunning) {
+        if (Atum.isRunning) {
             Difficulty difficulty;
-            switch (Main.difficulty) {
+            switch (Atum.difficulty) {
                 case 0 -> difficulty = Difficulty.PEACEFUL;
                 case 1 -> difficulty = Difficulty.EASY;
                 case 2 -> difficulty = Difficulty.NORMAL;
@@ -34,12 +34,12 @@ public abstract class CreateWorldScreenMixin {
                     hardcore = true;
                 }
                 default -> {
-                    Main.log(Level.WARN, "Invalid difficulty");
+                    Atum.log(Level.WARN, "Invalid difficulty");
                     difficulty = Difficulty.EASY;
                 }
             }
             currentDifficulty = difficulty;
-            levelNameField.setText((Main.seed==null||Main.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Main.getNextAttempt());
+            levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Atum.getNextAttempt());
 
             createLevel();
         }

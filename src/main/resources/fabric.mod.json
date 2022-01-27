@@ -14,7 +14,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.voidxwalker.autoreset.Main"
+      "me.voidxwalker.autoreset.Atum"
     ]
   },
   "mixins": [
