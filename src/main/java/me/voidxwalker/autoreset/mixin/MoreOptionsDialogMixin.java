@@ -1,6 +1,6 @@
 package me.voidxwalker.autoreset.mixin;
 
-import me.voidxwalker.autoreset.Main;
+import me.voidxwalker.autoreset.Atum;
 import net.minecraft.client.gui.screen.world.MoreOptionsDialog;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -19,10 +19,10 @@ public abstract class MoreOptionsDialogMixin {
 
     @ModifyArg(method = "getGeneratorOptions", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/gen/GeneratorOptions;withHardcore(ZLjava/util/OptionalLong;)Lnet/minecraft/world/gen/GeneratorOptions;",ordinal = 0),index = 1)
     public OptionalLong setSeed(OptionalLong originalSeed){
-        if(!Main.isRunning){
+        if(!Atum.isRunning){
             return originalSeed;
         }
-        String string = Main.seed==null?"":Main.seed;
+        String string = Atum.seed==null?"": Atum.seed;
         OptionalLong optionalLong;
         if (StringUtils.isEmpty(string)) {
             optionalLong = OptionalLong.empty();
@@ -34,7 +34,7 @@ public abstract class MoreOptionsDialogMixin {
                 optionalLong = OptionalLong.of(string.hashCode());
             }
         }
-        Main.log(Level.INFO,"Resetting "+((Main.seed ==null||Main.seed.isEmpty()?"a random seed":"the set seed: "+"\""+optionalLong.getAsLong()+"\"")));
+        Atum.log(Level.INFO,"Resetting "+((Atum.seed ==null|| Atum.seed.isEmpty()?"a random seed":"the set seed: "+"\""+optionalLong.getAsLong()+"\"")));
         return optionalLong;
     }
 }

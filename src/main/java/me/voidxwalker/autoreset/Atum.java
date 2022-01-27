@@ -1,9 +1,6 @@
 package me.voidxwalker.autoreset;
 
-import me.voidxwalker.autoreset.mixin.DebugHudMixin;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.gui.screen.LevelLoadingScreen;
@@ -18,17 +15,14 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.util.Scanner;
 
-public class Main implements ModInitializer {
-    private static final ModContainer mod = FabricLoader.getInstance().getModContainer("atum").orElseThrow(NullPointerException::new);
-    public static String MOD_VERSION = mod.getMetadata().getVersion().getFriendlyString();
-    public static String MOD_NAME = mod.getMetadata().getName();
+public class Atum implements ModInitializer {
     public static String seed;
     public static boolean isRunning = false;
     public static Logger LOGGER = LogManager.getLogger();
     public static int difficulty = 1;
 
     public static void log(Level level, String message) {
-        LOGGER.log(level, "[" + MOD_NAME + "] " + message);
+        LOGGER.log(level, message);
     }
 
     public static int getNextAttempt() {
