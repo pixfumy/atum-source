@@ -14,7 +14,8 @@ public class AutoResetOptionScreen extends Screen{
     private final Screen parent;
     private TextFieldWidget seedField;
     private String seed;
-    private Text difficulty;
+    private int difficulty;
+    private Text difficultyText;
     private  ButtonWidget difficultyButton;
 
     public AutoResetOptionScreen(@Nullable Screen parent) {
@@ -28,16 +29,18 @@ public class AutoResetOptionScreen extends Screen{
         this.seedField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Atum.getTranslation("menu.enterSeed","Enter a Seed")) {};
         this.seedField.setText(Atum.seed==null?"":Atum.seed);
         this.seed=Atum.seed;
+        this.difficulty=Atum.difficulty;
         this.seedField.setChangedListener((string) -> this.seed = string);
 
-        difficultyButton=this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height-100, 150, 20,difficulty , (buttonWidget) -> {
+        difficultyButton=this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height-100, 150, 20,difficultyText , (buttonWidget) -> {
 
-            Atum.difficulty= Atum.difficulty==4?0: Atum.difficulty+1;
+            this.difficulty= this.difficulty==4?0: this.difficulty+1;
             setDifficulty();
-            difficultyButton.setMessage(difficulty);
+            difficultyButton.setMessage(difficultyText);
         }));
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 28, 150, 20, Atum.getTranslation("menu.done","Done") , (buttonWidget) -> {
             Atum.seed=seed;
+            Atum.difficulty=this.difficulty;
             Atum.saveDifficulty();
             Atum.saveSeed();
             this.client.setScreen(this.parent);
@@ -67,22 +70,22 @@ public class AutoResetOptionScreen extends Screen{
     private void setDifficulty() {
         switch (Atum.difficulty) {
             case 0 :
-                difficulty = Atum.getTranslation("menu.autoreset.peaceful", "Peaceful");
+                difficultyText = Atum.getTranslation("menu.autoreset.peaceful", "Peaceful");
                 break;
             case 1 :
-                difficulty = Atum.getTranslation("menu.autoreset.easy", "Easy");
+                difficultyText = Atum.getTranslation("menu.autoreset.easy", "Easy");
                 break;
             case 2 :
-                difficulty = Atum.getTranslation("menu.autoreset.normal", "Normal");
+                difficultyText = Atum.getTranslation("menu.autoreset.normal", "Normal");
                 break;
             case 3 :
-                difficulty = Atum.getTranslation("menu.autoreset.hard", "Hard");
+                difficultyText = Atum.getTranslation("menu.autoreset.hard", "Hard");
                 break;
             case 4 :
-                difficulty = Atum.getTranslation("menu.autoreset.hardcore", "Hardcore");
+                difficultyText = Atum.getTranslation("menu.autoreset.hardcore", "Hardcore");
                 break;
             default:
-                difficulty = Atum.getTranslation("menu.autoreset.easy", "Easy");
+                difficultyText = Atum.getTranslation("menu.autoreset.easy", "Easy");
                 break;
         }
     }
