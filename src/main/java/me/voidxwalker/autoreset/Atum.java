@@ -1,8 +1,7 @@
 package me.voidxwalker.autoreset;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.gui.screen.ProgressScreen;
@@ -17,8 +16,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Atum implements ModInitializer {
-    private static final ModContainer mod = FabricLoader.getInstance().getModContainer("atum").orElseThrow(NullPointerException::new);
-    public static String MOD_NAME = mod.getMetadata().getName();
     public static String seed;
     public static boolean isRunning = false;
     public static Logger LOGGER = LogManager.getLogger();
@@ -26,7 +23,7 @@ public class Atum implements ModInitializer {
     public static boolean isHardcore=false;
 
     public static void log(Level level, String message) {
-        LOGGER.log(level, "[" + MOD_NAME + "] " + message);
+        LOGGER.log(level, message);
     }
 
     public static int getNextAttempt() {
