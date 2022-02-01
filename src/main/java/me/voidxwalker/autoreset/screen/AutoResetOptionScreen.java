@@ -68,19 +68,19 @@ public class AutoResetOptionScreen extends Screen{
 
     private void setDifficulty() {
         switch (this.difficulty) {
-            case 4 :
+            case 0 :
                 difficultyText= Atum.getTranslation("menu.autoreset.peaceful", "Peaceful");
                 break;
-            case 0 :
+            case 1 :
                 difficultyText = Atum.getTranslation("menu.autoreset.easy", "Easy");
                 break;
-            case 1 :
+            case 2 :
                 difficultyText = Atum.getTranslation("menu.autoreset.normal", "Normal");
                 break;
-            case 2 :
+            case 3 :
                 difficultyText = Atum.getTranslation("menu.autoreset.hard", "Hard");
                 break;
-            case 3 :
+            case 4 :
                 difficultyText = Atum.getTranslation("menu.autoreset.hardcore", "Hardcore");
                 break;
             default:
