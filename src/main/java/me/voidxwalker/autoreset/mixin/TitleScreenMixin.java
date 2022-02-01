@@ -54,19 +54,19 @@ public class TitleScreenMixin extends Screen {
 
     private void getDifficulty() {
         switch (Atum.difficulty) {
-            case 0 :
+            case 4 :
                 difficulty = Atum.getTranslation("menu.peaceful", "Peaceful");
                 break;
-            case 1 :
+            case 0 :
                 difficulty = Atum.getTranslation("menu.easy", "Easy");
                 break;
-            case 2 :
+            case 1 :
                 difficulty = Atum.getTranslation("menu.normal", "Normal");
                 break;
-            case 3 :
+            case 2 :
                 difficulty = Atum.getTranslation("menu.hard", "Hard");
                 break;
-            case 4 :
+            case 3 :
                 difficulty = Atum.getTranslation("menu.hardcore", "Hardcore");
                 break;
         }

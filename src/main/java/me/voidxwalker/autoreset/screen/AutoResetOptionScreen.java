@@ -25,11 +25,12 @@ public class AutoResetOptionScreen extends Screen{
 
     protected void init() {
         this.client.keyboard.enableRepeatEvents(true);
-        setDifficulty();
+
         this.seedField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Atum.getTranslation("menu.enterSeed","Enter a Seed")) {};
         this.seedField.setText(Atum.seed==null?"":Atum.seed);
         this.seed=Atum.seed;
         this.difficulty=Atum.difficulty;
+        setDifficulty();
         this.seedField.setChangedListener((string) -> this.seed = string);
         difficultyButton=this.addButton(new ButtonWidget(this.width / 2 - 75, this.height-100, 150, 20,difficultyText, (buttonWidget) -> {
            this.difficulty= this.difficulty>=4?0: this.difficulty+1;
@@ -67,19 +68,19 @@ public class AutoResetOptionScreen extends Screen{
 
     private void setDifficulty() {
         switch (this.difficulty) {
-            case 0 :
+            case 4 :
                 difficultyText= Atum.getTranslation("menu.autoreset.peaceful", "Peaceful");
                 break;
-            case 1 :
+            case 0 :
                 difficultyText = Atum.getTranslation("menu.autoreset.easy", "Easy");
                 break;
-            case 2 :
+            case 1 :
                 difficultyText = Atum.getTranslation("menu.autoreset.normal", "Normal");
                 break;
-            case 3 :
+            case 2 :
                 difficultyText = Atum.getTranslation("menu.autoreset.hard", "Hard");
                 break;
-            case 4 :
+            case 3 :
                 difficultyText = Atum.getTranslation("menu.autoreset.hardcore", "Hardcore");
                 break;
             default:
