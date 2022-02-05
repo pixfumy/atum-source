@@ -21,7 +21,7 @@ public class LoadingScreenRendererMixin implements Pingable {
             Window window = new Window(this.field_1029);
             int j = window.getWidth();
             int k = window.getHeight();
-            String string ="Main.seed";
+            String string =Atum.seed;
             this.field_1029.textRenderer.drawWithShadow(string, (float)((j - this.field_1029.textRenderer.getStringWidth(string)) / 2), (float)(k / 2 - 4 -40), 16777215);
         }
 
