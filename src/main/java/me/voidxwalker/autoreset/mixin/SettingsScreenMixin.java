@@ -30,15 +30,11 @@ public abstract class SettingsScreenMixin extends Screen {
         if (button.id == 696969) {
             Atum.isRunning=false;
             boolean bl = this.client.isIntegratedServerRunning();
-            boolean bl2 = this.client.isConnectedToRealms();
             button.active = false;
             this.client.world.disconnect();
             this.client.connect((ClientWorld)null);
             if (bl) {
                 this.client.openScreen(new TitleScreen());
-            } else if (bl2) {
-                RealmsBridge realmsBridge = new RealmsBridge();
-                realmsBridge.switchToRealms(new TitleScreen());
             } else {
                 this.client.openScreen(new MultiplayerScreen(new TitleScreen()));
             }

@@ -18,7 +18,7 @@ public class LoadingScreenRendererMixin implements Pingable {
     @Inject(method = "progressStagePercentage", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", shift = At.Shift.AFTER))
     public void modifyString(int percentage, CallbackInfo ci){
         if(Atum.isRunning&& Atum.seed!=null&&!Atum.seed.isEmpty()){
-            Window window = new Window(this.field_1029);
+            Window window = new Window(this.field_1029, this.field_1029.width, this.field_1029.height);
             int j = window.getWidth();
             int k = window.getHeight();
             String string =Atum.seed;
