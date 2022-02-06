@@ -79,8 +79,7 @@ public abstract class CreateWorldScreenMixin extends Screen{
         if (this.tweakedCheats && !this.hardcore) {
             levelInfo.enableCommands();
         }
-        this.client.startGame((Atum.seed==null|| Atum.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Atum.getNextAttempt(), (Atum.seed==null|| Atum.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Atum.getNextAttempt(), levelInfo);
-
+        this.client.startGame(levelNameField.getText(), levelNameField.getText(), levelInfo);
 
         Atum.log(Level.INFO,(Atum.seed==null|| Atum.seed.isEmpty()?"Resetting a random seed":"Resetting the set seed"+"\""+l+"\""));
 
