@@ -18,8 +18,10 @@ public class DebugHudMixin implements Pingable {
             cancellable = true
     )
     private void getRightText(CallbackInfoReturnable<List<String>> info) {
-        List<String> returnValue = info.getReturnValue();
-        returnValue.add("Resetting "+(Atum.seed==null|| Atum.seed.isEmpty()?" a random seed":(" the seed: \""+ Atum.seed+"\"")));
+        if(Atum.isRunning){
+            List<String> returnValue = info.getReturnValue();
+            returnValue.add("Resetting "+(Atum.seed==null|| Atum.seed.isEmpty()?"a random seed":("the seed: \""+ Atum.seed+"\"")));
+        }
     }
     @Override
     public boolean ping() {
