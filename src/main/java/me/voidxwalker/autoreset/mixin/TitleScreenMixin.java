@@ -30,15 +30,15 @@ public class TitleScreenMixin extends Screen {
             if (Atum.loopPrevent) {
                 Atum.loopPrevent = false;
             } else {
-                minecraft.openScreen(new CreateWorldScreen(this));
+                client.openScreen(new CreateWorldScreen(this));
             }
         } else {
             resetButton = this.addButton(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, "", (buttonWidget) -> {
                 if (hasShiftDown()) {
-                    minecraft.openScreen(new AutoResetOptionScreen(this));
+                    client.openScreen(new AutoResetOptionScreen(this));
                 } else {
                     Atum.isRunning = true;
-                    this.minecraft.openScreen(this);
+                    this.client.openScreen(this);
                 }
             }));
         }
@@ -47,10 +47,10 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "render", at = @At("TAIL"))
     private void goldBootsOverlay(int mouseX, int mouseY, float delta, CallbackInfo ci) {
         getDifficulty();
-        this.minecraft.getTextureManager().bindTexture(BUTTON_IMAGE);
-       blit(this.width / 2 - 124+2, this.height / 4 + 48+2, 0.0F, 0.0F, 16, 16, 16, 16);
+        this.client.getTextureManager().bindTexture(BUTTON_IMAGE);
+        drawTexture(this.width / 2 - 124+2, this.height / 4 + 48+2, 0.0F, 0.0F, 16, 16, 16, 16);
         if (resetButton.isHovered() && hasShiftDown()) {
-            drawCenteredString(minecraft.textRenderer, difficulty.asString(), this.width / 2 - 124+11, this.height / 4 + 48-15, 16777215);
+            drawCenteredString(client.textRenderer, difficulty.asString(), this.width / 2 - 124+11, this.height / 4 + 48-15, 16777215);
         }
     }
 

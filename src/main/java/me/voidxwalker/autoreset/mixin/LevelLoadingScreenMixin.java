@@ -21,7 +21,7 @@ public class LevelLoadingScreenMixin extends Screen implements Pingable {
     public void modifyString(int mouseX, int mouseY, float delta, CallbackInfo ci,String ignored,int i,int j){
         if(Atum.isRunning&& Atum.seed!=null&&!Atum.seed.isEmpty()){
             String string = Atum.seed;
-            this.drawCenteredString( minecraft.textRenderer, string, i, j - 9 / 2 - 50, 16777215);
+            this.drawCenteredString(client.textRenderer, string, i, j - 9 / 2 - 50, 16777215);
         }
 
     }

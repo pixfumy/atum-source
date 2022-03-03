@@ -23,10 +23,10 @@ public class AutoResetOptionScreen extends Screen{
     }
 
     protected void init() {
-        this.minecraft.keyboard.enableRepeatEvents(true);
+        this.client.keyboard.enableRepeatEvents(true);
         this.isHardcore=Atum.isHardcore;
         setDifficulty();
-        this.seedField = new TextFieldWidget(minecraft.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Atum.getTranslation("menu.enterSeed","Enter a Seed").asString()) {};
+        this.seedField = new TextFieldWidget(client.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Atum.getTranslation("menu.enterSeed","Enter a Seed").asString()) {};
         this.seedField.setText(Atum.seed==null?"":Atum.seed);
         this.seed=Atum.seed;
         this.seedField.setChangedListener((string) -> this.seed = string);
@@ -41,25 +41,25 @@ public class AutoResetOptionScreen extends Screen{
             Atum.isHardcore=this.isHardcore;
             Atum.saveDifficulty();
             Atum.saveSeed();
-            this.minecraft.openScreen(this.parent);
+            this.client.openScreen(this.parent);
         }));
-        this.addButton(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel"), (buttonWidget) -> this.minecraft.openScreen(this.parent)));
+        this.addButton(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel"), (buttonWidget) -> this.client.openScreen(this.parent)));
         this.children.add(this.seedField);
         this.setInitialFocus(this.seedField);
     }
 
     public void removed() {
-        this.minecraft.keyboard.enableRepeatEvents(false);
+        this.client.keyboard.enableRepeatEvents(false);
     }
 
     public void onClose() {
-        this.minecraft.openScreen(this.parent);
+        this.client.openScreen(this.parent);
     }
 
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
-        drawCenteredString(minecraft.textRenderer, this.title.asString(), this.width / 2, this.height - 210, -1);
-        drawString( minecraft.textRenderer, Atum.getTranslation("menu.enterSeed","Seed (Leave empty for a random Seed)").asString(), this.width / 2 - 100, this.height - 180, -6250336);
+        drawCenteredString(client.textRenderer, this.title.asString(), this.width / 2, this.height - 210, -1);
+        drawString( client.textRenderer, Atum.getTranslation("menu.enterSeed","Seed (Leave empty for a random Seed)").asString(), this.width / 2 - 100, this.height - 180, -6250336);
 
         this.seedField.render( mouseX, mouseY, delta);
         super.render(mouseX, mouseY, delta);

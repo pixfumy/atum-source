@@ -25,9 +25,9 @@ public class SettingsScreenMixin extends Screen {
             this.addButton(new ButtonWidget(0, this.height - 20, 100, 20, Atum.getTranslation("menu.stop_resets","Stop Resets & Quit").asString(), (buttonWidget) -> {
 
                 Atum.isRunning = false;
-                this.minecraft.world.disconnect();
-                this.minecraft.disconnect(new SaveLevelScreen(new TranslatableText("menu.savingLevel")));
-                this.minecraft.openScreen(new TitleScreen());
+                this.client.world.disconnect();
+                this.client.disconnect(new SaveLevelScreen(new TranslatableText("menu.savingLevel")));
+                this.client.openScreen(new TitleScreen());
             }));
         }
     }
