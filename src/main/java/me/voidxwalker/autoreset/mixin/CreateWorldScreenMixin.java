@@ -34,7 +34,7 @@ public abstract class CreateWorldScreenMixin {
             createLevel();
         }
     }
-    @Redirect(method = "createLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;getText()Ljava/lang/String;"))
+    @Redirect(method = "createLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;getText()Ljava/lang/String;",ordinal = 0))
     private String injected(TextFieldWidget instance) {
         if(!Atum.isRunning){
             return instance.getText();
