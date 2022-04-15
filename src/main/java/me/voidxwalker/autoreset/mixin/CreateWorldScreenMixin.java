@@ -4,6 +4,7 @@ import me.voidxwalker.autoreset.Atum;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.level.LevelGeneratorType;
 import net.minecraft.world.level.LevelInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -69,7 +70,7 @@ public abstract class CreateWorldScreenMixin extends Screen{
             }
         }
 
-        LevelInfo.GameMode gameMode = LevelInfo.GameMode.byName(this.gamemodeName);
+        GameMode gameMode = GameMode.setGameModeWithString(this.gamemodeName);
         LevelInfo levelInfo = new LevelInfo(l, gameMode, this.structures, this.hardcore, LevelGeneratorType.TYPES[this.generatorType]);
         levelInfo.setGeneratorOptions(this.generatorOptions);
         if (this.bonusChest && !this.hardcore) {

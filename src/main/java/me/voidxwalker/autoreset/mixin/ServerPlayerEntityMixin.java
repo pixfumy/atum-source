@@ -2,8 +2,8 @@ package me.voidxwalker.autoreset.mixin;
 
 import com.mojang.authlib.GameProfile;
 import me.voidxwalker.autoreset.Atum;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
