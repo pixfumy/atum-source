@@ -1,10 +1,10 @@
 package me.voidxwalker.autoreset.mixin;
 
 import me.voidxwalker.autoreset.Atum;
+import net.minecraft.class_1157;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.world.GameMode;
 import net.minecraft.world.level.LevelGeneratorType;
 import net.minecraft.world.level.LevelInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,6 @@ public abstract class CreateWorldScreenMixin extends Screen{
 
     @Shadow private boolean creatingLevel;
 
-    @Shadow private String gamemodeName;
 
     @Shadow private boolean structures;
 
@@ -40,6 +39,8 @@ public abstract class CreateWorldScreenMixin extends Screen{
     @Shadow private boolean tweakedCheats;
 
     @Shadow private String saveDirectoryName;
+
+    @Shadow private String gamemodeName;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
@@ -70,8 +71,7 @@ public abstract class CreateWorldScreenMixin extends Screen{
             }
         }
 
-        GameMode gameMode = GameMode.setGameModeWithString(this.gamemodeName);
-        LevelInfo levelInfo = new LevelInfo(l, gameMode, this.structures, this.hardcore, LevelGeneratorType.TYPES[this.generatorType]);
+        LevelInfo levelInfo = new LevelInfo(l,  class_1157.method_3765(this.gamemodeName), this.structures, this.hardcore, LevelGeneratorType.TYPES[this.generatorType]);
         levelInfo.setGeneratorOptions(this.generatorOptions);
         if (this.bonusChest && !this.hardcore) {
             levelInfo.setBonusChest();
