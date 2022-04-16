@@ -1,6 +1,7 @@
 package me.voidxwalker.autoreset.screen;
 
 import me.voidxwalker.autoreset.Atum;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -27,35 +28,29 @@ public class AutoResetOptionScreen extends Screen{
         this.seedField = new TextFieldWidget(6969696,client.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20) ;
         this.seedField.setText(Atum.seed==null?"": Atum.seed);
         this.seedField.setFocused(true);
-        this.buttons.add(new ButtonWidget(1,this.width / 2 - 75, this.height-100, 150, 20,difficulty));
-        this.buttons.add(new ButtonWidget(2,this.width / 2 - 155, this.height - 28, 150, 20, I18n.translate("gui.done") ));
-        this.buttons.add(new ButtonWidget(3,this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel")));
-    }
-
-    protected void buttonClicked(ButtonWidget button) {
-        switch(button.id) {
-
-            case 1:
-                this.isHardcore=!this.isHardcore;
+        method_13411(new ButtonWidget(1,this.width / 2 - 75, this.height-100, 150, 20,difficulty){
+            public void method_18374(double d, double e) {
+                ((AutoResetOptionScreen)MinecraftClient.getInstance().currentScreen).isHardcore =!((AutoResetOptionScreen)MinecraftClient.getInstance().currentScreen).isHardcore;
                 setDifficulty();
-                button.message=difficulty;
-                break;
-            case 2:
+                this.message=difficulty;
+            }
+        });
+        method_13411(new ButtonWidget(2,this.width / 2 - 155, this.height - 28, 150, 20, I18n.translate("gui.done") ){
+            public void method_18374(double d, double e) {
                 Atum.seed=seed;
-                Atum.isHardcore=this.isHardcore;
+                Atum.isHardcore= ((AutoResetOptionScreen)MinecraftClient.getInstance().currentScreen).isHardcore;
                 Atum.saveDifficulty();
                 Atum.saveSeed();
-                this.client.openScreen(this.parent);
-                break;
-            case 3:
-                this.client.openScreen(this.parent);
-                break;
-            default:
-                break;
-
-        }
-
+                MinecraftClient.getInstance().openScreen(null);
+            }
+        });
+        method_13411(new ButtonWidget(3,this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel")){
+            public void method_18374(double d, double e) {
+                MinecraftClient.getInstance().openScreen(null);
+            }
+        });
     }
+
 
 public void tick(){
         seedField.tick();
@@ -66,7 +61,7 @@ public void tick(){
         drawCenteredString(client.textRenderer, this.title, this.width / 2, this.height - 210, -1);
         this.drawWithShadow( client.textRenderer, "Seed (Leave empty for a random Seed)", this.width / 2 - 100, this.height - 180, -6250336);
 
-        this.seedField.render();
+        this.seedField.method_18385(mouseX, mouseY, delta);
         super.render(mouseX, mouseY, delta);
     }
 
@@ -79,11 +74,13 @@ public void tick(){
         }
 
     }
-    protected void keyPressed(char character, int code) {
+    public boolean keyPressed(int i, int j, int k) {
         if (this.seedField.isFocused()) {
-            this.seedField.keyPressed(character, code);
+            this.seedField.keyPressed(i,j,k);
             this.seed = this.seedField.getText();
+            return true;
         }
 
+        return false;
     }
 }

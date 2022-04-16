@@ -3,26 +3,25 @@ package me.voidxwalker.autoreset.mixin;
 import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.Pingable;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.LoadingScreenRenderer;
-import net.minecraft.client.util.Window;
+import net.minecraft.client.gui.screen.ProgressScreen;
+import net.minecraft.client.gui.screen.Screen;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(LoadingScreenRenderer.class)
-public class LoadingScreenRendererMixin implements Pingable {
-    @Shadow private MinecraftClient field_1029;
+@Mixin(ProgressScreen.class)
+public class LoadingScreenRendererMixin extends Screen implements Pingable  {
 
-    @Inject(method = "progressStagePercentage", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Ljava/lang/String;FFI)I", shift = At.Shift.AFTER))
-    public void modifyString(int percentage, CallbackInfo ci){
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ProgressScreen;drawCenteredString(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V", ordinal =0,shift = At.Shift.AFTER))
+    public void modifyString(int mouseX, int mouseY, float tickDelta, CallbackInfo ci){
         if(Atum.isRunning&& Atum.seed!=null&&!Atum.seed.isEmpty()){
-            Window window = new Window(this.field_1029);
-            int j = window.getWidth();
-            int k = window.getHeight();
+            int j = this.width;
+            int k = this.height;
             String string =Atum.seed;
-            this.field_1029.textRenderer.drawWithShadow(string, (float)((j - this.field_1029.textRenderer.getStringWidth(string)) / 2), (float)(k / 2 - 4 -40), 16777215);
+            this.drawCenteredString(this.textRenderer,string, j / 2, 50, 16777215);
         }
 
     }

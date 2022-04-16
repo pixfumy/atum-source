@@ -2,10 +2,6 @@ package me.voidxwalker.autoreset;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.DebugHud;
-import net.minecraft.client.gui.screen.ProgressScreen;
-import net.minecraft.client.render.LoadingScreenRenderer;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

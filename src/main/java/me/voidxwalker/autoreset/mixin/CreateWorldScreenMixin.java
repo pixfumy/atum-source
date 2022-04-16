@@ -1,10 +1,15 @@
 package me.voidxwalker.autoreset.mixin;
 
+import com.google.gson.JsonElement;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.types.JsonOps;
 import me.voidxwalker.autoreset.Atum;
-import net.minecraft.class_1157;
+import net.minecraft.class_4372;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.level.LevelGeneratorType;
 import net.minecraft.world.level.LevelInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +37,6 @@ public abstract class CreateWorldScreenMixin extends Screen{
 
     @Shadow private int generatorType;
 
-    @Shadow public String generatorOptions;
 
     @Shadow private boolean bonusChest;
 
@@ -41,6 +45,8 @@ public abstract class CreateWorldScreenMixin extends Screen{
     @Shadow private String saveDirectoryName;
 
     @Shadow private String gamemodeName;
+
+    @Shadow public NbtCompound field_20472;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
@@ -71,8 +77,8 @@ public abstract class CreateWorldScreenMixin extends Screen{
             }
         }
 
-        LevelInfo levelInfo = new LevelInfo(l,  class_1157.method_3765(this.gamemodeName), this.structures, this.hardcore, LevelGeneratorType.TYPES[this.generatorType]);
-        levelInfo.setGeneratorOptions(this.generatorOptions);
+        LevelInfo levelInfo = new LevelInfo(l, GameMode.setGameModeWithString(this.gamemodeName), this.structures, this.hardcore, LevelGeneratorType.TYPES[this.generatorType]);
+        levelInfo.method_16395((JsonElement) Dynamic.convert(class_4372.field_21487, JsonOps.INSTANCE, this.field_20472));
         if (this.bonusChest && !this.hardcore) {
             levelInfo.setBonusChest();
         }

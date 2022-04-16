@@ -2,6 +2,7 @@ package me.voidxwalker.autoreset.mixin;
 
 import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.screen.AutoResetOptionScreen;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
     private String difficulty;
-    private static final Identifier BUTTON_IMAGE = new Identifier("textures/items/gold_boots.png");
+    private static final Identifier BUTTON_IMAGE = new Identifier("textures/item/golden_boots.png");
 
 
 
@@ -26,7 +27,18 @@ public abstract class TitleScreenMixin extends Screen {
             Atum.loopPrevent2=false;
             client.openScreen(new CreateWorldScreen(this));
         } else {
-            this.buttons.add(new ButtonWidget(69,this.width / 2 - 124, this.height / 4 + 48, 20, 20, ""));
+            method_13411(new ButtonWidget(69,this.width / 2 - 124, this.height / 4 + 48, 20, 20, ""){
+                @Override
+                public void method_18374(double d, double e) {
+                    System.out.println(1);
+                    if (hasShiftDown()) {
+                        client.openScreen(new AutoResetOptionScreen(null));
+                    } else {
+                        Atum.isRunning = true;
+                        MinecraftClient.getInstance().openScreen(null);
+                    }
+                }
+            });
         }
     }
 
@@ -39,17 +51,7 @@ public abstract class TitleScreenMixin extends Screen {
             drawCenteredString(client.textRenderer, difficulty, this.width / 2 - 124+11, this.height / 4 + 48-15, 16777215);
         }
     }
-    @Inject(at = @At("RETURN"), method = "buttonClicked")
-    private void buttonCheck(ButtonWidget button, CallbackInfo info) {
-        if (button.id == 69) {
-            if (hasShiftDown()) {
-                client.openScreen(new AutoResetOptionScreen(this));
-            } else {
-                Atum.isRunning = true;
-                this.client.openScreen(this);
-            }
-        }
-    }
+
     private void getDifficulty() {
         if(Atum.isHardcore) {
             difficulty = "Hardcore: ON";
