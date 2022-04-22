@@ -24,7 +24,7 @@ public class AutoResetOptionScreen extends Screen{
     }
 
     protected void init() {
-        this.client.keyboard.enableRepeatEvents(true);
+        this.client.keyboard.setRepeatEvents(true);
 
         this.seedField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Atum.getTranslation("menu.enterSeed","Enter a Seed")) {};
         this.seedField.setText(Atum.seed==null?"":Atum.seed);
@@ -50,7 +50,7 @@ public class AutoResetOptionScreen extends Screen{
     }
 
     public void removed() {
-        this.client.keyboard.enableRepeatEvents(false);
+        this.client.keyboard.setRepeatEvents(true);
     }
 
     public void onClose() {

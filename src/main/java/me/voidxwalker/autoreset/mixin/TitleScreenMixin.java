@@ -29,7 +29,7 @@ public class TitleScreenMixin extends Screen {
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo info) {
         if (Atum.isRunning) {
-            client.openScreen(new CreateWorldScreen(this));
+            client.openScreen(CreateWorldScreen.create(this));
         } else {
             resetButton = this.addButton(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, new LiteralText(""), (buttonWidget) -> {
                 if (hasShiftDown()) {
