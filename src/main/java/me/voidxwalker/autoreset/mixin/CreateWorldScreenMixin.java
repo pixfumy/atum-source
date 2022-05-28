@@ -41,6 +41,8 @@ public abstract class CreateWorldScreenMixin extends Screen{
 
     @Shadow private String saveDirectoryName;
 
+    @Shadow protected abstract void updateSaveFolderName();
+
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
         if (Atum.isRunning) {
@@ -80,7 +82,8 @@ public abstract class CreateWorldScreenMixin extends Screen{
         if (this.tweakedCheats && !this.hardcore) {
             levelInfo.enableCommands();
         }
-        this.client.startGame(levelNameField.getText(), levelNameField.getText(), levelInfo);
+        updateSaveFolderName();
+        this.client.startGame(this.saveDirectoryName, levelNameField.getText(), levelInfo);
 
 
         Atum.log(Level.INFO,(Atum.seed==null|| Atum.seed.isEmpty()?"Resetting a random seed":"Resetting the set seed"+"\""+l+"\""));
