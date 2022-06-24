@@ -27,19 +27,22 @@ public class TitleScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(method = "init", at = @At("TAIL"))
+    @Inject(method="init", at=@At("TAIL"))
     private void init(CallbackInfo info) {
+        this.resetButton = addDrawableChild(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, new LiteralText(""), buttonWidget -> {
+            if (hasShiftDown()) {
+                this.client.setScreen(new AutoResetOptionScreen(this));
+            } else {
+                Atum.isRunning = true;
+            }
+        }));
+    }
+
+    @Inject(method="render", at=@At("HEAD"), cancellable = true)
+    private void reset(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (Atum.isRunning) {
-            client.setScreen(CreateWorldScreen.create(this));
-        } else {
-            resetButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, new LiteralText(""), (buttonWidget) -> {
-                if (hasShiftDown()) {
-                    client.setScreen(new AutoResetOptionScreen(this));
-                } else {
-                    Atum.isRunning = true;
-                    this.client.setScreen(this);
-                }
-            }));
+            this.client.setScreen(CreateWorldScreen.create(this));
+            ci.cancel();
         }
     }
 
