@@ -3,7 +3,7 @@
   "id": "atum",
   "version": "${version}",
   "name": "Atum",
-  "description": "Mod to automatically reset RSG and SSG",
+  "description": "Mod to automatically reset Random and Set Seeds",
   "authors": [
     "Void_X_Walker"
   ],
@@ -21,6 +21,6 @@
     "autoreset.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.7.4"
+    "fabricloader": ">=0.12.0"
   }
 }

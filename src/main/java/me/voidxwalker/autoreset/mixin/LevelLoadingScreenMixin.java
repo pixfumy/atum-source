@@ -19,12 +19,11 @@ public class LevelLoadingScreenMixin extends Screen implements Pingable {
     }
 
     @Inject(method = "render", at = @At("TAIL"),locals = LocalCapture.CAPTURE_FAILSOFT)
-    public void modifyString(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci,String ignored,int i, int j){
+    public void atum_modifyString(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci,String ignored,long l,int i, int j){
         if(Atum.isRunning&& Atum.seed!=null&&!Atum.seed.isEmpty()){
             String string = Atum.seed;
             drawCenteredString(matrices, this.textRenderer, string, i, j - 9 / 2 - 50, 16777215);
         }
-
     }
     @Override
     public boolean ping() {
