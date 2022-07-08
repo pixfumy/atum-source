@@ -26,7 +26,8 @@ public class Atum implements ModInitializer {
     public static String seed="";
     public static int difficulty = 1;
     public static int generatorType = 0;
-    public static int attempts;
+    public static int rsgAttempts;
+    public static int ssgAttempts;
     public static boolean structures=true;
     public static boolean bonusChest=false;
     static Map<String,String> extraProperties= new LinkedHashMap<>();
@@ -62,7 +63,7 @@ public class Atum implements ModInitializer {
         resetKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 getTranslation("key.atum.reset","Create New World").getString(),
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_P,
+                GLFW.GLFW_KEY_F6,
                 getTranslation("key.categories.atum","Atum").getString()
         ));
         new File("config/atum").mkdir();
@@ -95,9 +96,9 @@ public class Atum implements ModInitializer {
                 String s =load(attemptsFile);
                 if(s!=null){
                     try{
-                        attempts = Integer.parseInt(s );
+                        rsgAttempts = Integer.parseInt(s );
                     } catch (NumberFormatException e) {
-                        attempts=0;
+                        rsgAttempts=0;
                     }
                 }
                 attemptsFile.delete();
@@ -133,7 +134,8 @@ public class Atum implements ModInitializer {
     public static void saveProperties(){
         try(FileOutputStream f = new FileOutputStream(configFile)) {
             Properties properties = new Properties();
-            properties.put("attempts",String.valueOf(attempts));
+            properties.put("rsgAttempts",String.valueOf(rsgAttempts));
+            properties.put("ssgAttempts",String.valueOf(ssgAttempts));
             properties.put("seed",seed);
             properties.put("difficulty",String.valueOf( difficulty));
             properties.put("generatorType", String.valueOf(generatorType));
@@ -175,9 +177,14 @@ public class Atum implements ModInitializer {
                 generatorType = 0;
             }
             try{
-                attempts =properties==null||!properties.containsKey("attempts")?0:Integer.parseInt(properties.getProperty("attempts"));
+                rsgAttempts =properties==null||!properties.containsKey("rsgAttempts")?0:Integer.parseInt(properties.getProperty("rsgAttempts"));
             } catch (NumberFormatException e) {
-                attempts=0;
+                rsgAttempts=0;
+            }
+            try{
+                ssgAttempts =properties==null||!properties.containsKey("ssgAttempts")?0:Integer.parseInt(properties.getProperty("ssgAttempts"));
+            } catch (NumberFormatException e) {
+                ssgAttempts=0;
             }
             structures = properties == null || !properties.containsKey("structures") || Boolean.parseBoolean(properties.getProperty("structures"));
             bonusChest = properties != null &&  Boolean.parseBoolean(properties.getProperty("bonusChest"));
@@ -191,6 +198,5 @@ public class Atum implements ModInitializer {
         WORLD_GEN,
         POST_WORLDGEN,
         RESETTING
-
     }
 }

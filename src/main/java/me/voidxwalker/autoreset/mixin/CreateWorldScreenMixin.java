@@ -53,9 +53,15 @@ public abstract class CreateWorldScreenMixin {
             }
             field_24289=difficulty;
             field_24290=difficulty;
-            Atum.attempts++;
+            if(Atum.seed==null|| Atum.seed.isEmpty()){
+                Atum.rsgAttempts++;
+            }
+            else {
+                Atum.ssgAttempts++;
+            }
+
             Atum.saveProperties();
-            levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Atum.attempts);
+            levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty())?"Random Speedrun #" + Atum.rsgAttempts:"Set Speedrun #" + Atum.ssgAttempts);
             ((IMoreOptionsDialog)moreOptionsDialog).setGeneratorType(GeneratorTypeAccessor.getVALUES().get(Atum.generatorType));
             ((IMoreOptionsDialog)moreOptionsDialog).setGenerateStructure(Atum.structures);
             ((IMoreOptionsDialog)moreOptionsDialog).setGenerateBonusChest(Atum.bonusChest);
