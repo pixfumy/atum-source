@@ -54,7 +54,7 @@ public class AutoResetOptionScreen extends Screen{
             }
         }){
             public Text getMessage() {
-                return super.getMessage().shallowCopy().append(" ").append(GeneratorTypeAccessor.getVALUES().get(generatorType).getTranslationKey());
+                return super.getMessage().shallowCopy().append(": ").append(GeneratorTypeAccessor.getVALUES().get(generatorType).getDisplayName());
             }
         });
 
