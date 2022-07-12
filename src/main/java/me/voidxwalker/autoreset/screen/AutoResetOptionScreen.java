@@ -1,12 +1,15 @@
 package me.voidxwalker.autoreset.screen;
 
 import me.voidxwalker.autoreset.Atum;
+import me.voidxwalker.autoreset.mixin.GeneratorTypeAccessor;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.world.Difficulty;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -15,8 +18,9 @@ public class AutoResetOptionScreen extends Screen{
     private TextFieldWidget seedField;
     private String seed;
     private int difficulty;
-    private Text difficultyText;
-    private  ButtonWidget difficultyButton;
+    private int generatorType;
+    private boolean structures;
+    private boolean bonusChest;
 
     public AutoResetOptionScreen(@Nullable Screen parent) {
         super(Atum.getTranslation("menu.autoresetTitle","Autoreset Options"));
@@ -28,21 +32,55 @@ public class AutoResetOptionScreen extends Screen{
         this.seedField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20, Atum.getTranslation("menu.enterSeed","Enter a Seed")) {};
         this.seedField.setText(Atum.seed==null?"":Atum.seed);
         this.seed=Atum.seed;
+        this.generatorType=Atum.generatorType;
+        this.structures=Atum.structures;
+        this.bonusChest=Atum.bonusChest;
         this.difficulty=Atum.difficulty;
-        setDifficulty();
         this.seedField.setChangedListener((string) -> this.seed = string);
+        this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 100, 150, 20, new TranslatableText("options.difficulty"), (buttonWidget) -> {
+            this.difficulty = this.difficulty >= 3 ? -1 : this.difficulty + 1;
+        }){
+            public Text getMessage() {
+                if(difficulty==-1){
+                    return super.getMessage().shallowCopy().append(": ").append(new TranslatableText("selectWorld.gameMode.hardcore"));
+                }
+                return super.getMessage().shallowCopy().append(": ").append(Difficulty.byOrdinal(difficulty).getTranslatableName());
+            }
+        });
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 100, 150, 20, new TranslatableText("selectWorld.mapType"), (buttonWidget) -> {
+            generatorType++;
+            if(generatorType>6){
+                generatorType=0;
+            }
+        }){
+            public Text getMessage() {
+                return super.getMessage().shallowCopy().append(": ").append(GeneratorTypeAccessor.getVALUES().get(generatorType).getDisplayName());
+            }
+        });
 
-        difficultyButton=this.addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height-100, 150, 20,difficultyText , (buttonWidget) -> {
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 64, 150, 20,  new TranslatableText("selectWorld.mapFeatures"), (buttonWidget) -> {
+            this.structures=!structures;
+        }){
+            public Text getMessage() {
+                return super.getMessage().shallowCopy().append(" ").append(String.valueOf(structures));
+            }
+        });
 
-            this.difficulty= this.difficulty==4?0: this.difficulty+1;
-            setDifficulty();
-            difficultyButton.setMessage(difficultyText);
-        }));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 64, 150, 20, new TranslatableText("selectWorld.bonusItems"), (buttonWidget) -> {
+            this.bonusChest=!bonusChest;
+        }){
+            public Text getMessage() {
+                return super.getMessage().shallowCopy().append(" ").append(String.valueOf(bonusChest));
+            }
+        });
+
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 28, 150, 20, Atum.getTranslation("menu.done","Done") , (buttonWidget) -> {
-            Atum.seed=seed;
+            Atum.seed=this.seed;
             Atum.difficulty=this.difficulty;
-            Atum.saveDifficulty();
-            Atum.saveSeed();
+            Atum.structures=this.structures;
+            Atum.bonusChest=this.bonusChest;
+            Atum.generatorType=this.generatorType;
+            Atum.saveProperties();
             this.client.setScreen(this.parent);
         }));
         this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, ScreenTexts.CANCEL, (buttonWidget) -> this.client.setScreen(this.parent)));
@@ -67,27 +105,5 @@ public class AutoResetOptionScreen extends Screen{
         super.render(matrices, mouseX, mouseY, delta);
     }
 
-    private void setDifficulty() {
-        switch (this.difficulty) {
-            case 0 :
-                difficultyText = Atum.getTranslation("menu.autoreset.peaceful", "Peaceful");
-                break;
-            case 1 :
-                difficultyText = Atum.getTranslation("menu.autoreset.easy", "Easy");
-                break;
-            case 2 :
-                difficultyText = Atum.getTranslation("menu.autoreset.normal", "Normal");
-                break;
-            case 3 :
-                difficultyText = Atum.getTranslation("menu.autoreset.hard", "Hard");
-                break;
-            case 4 :
-                difficultyText = Atum.getTranslation("menu.autoreset.hardcore", "Hardcore");
-                break;
-            default:
-                difficultyText = Atum.getTranslation("menu.autoreset.easy", "Easy");
-                break;
-        }
-    }
 
 }
