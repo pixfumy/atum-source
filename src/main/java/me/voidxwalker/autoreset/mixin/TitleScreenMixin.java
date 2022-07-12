@@ -30,7 +30,6 @@ public abstract class TitleScreenMixin extends Screen {
             method_13411(new ButtonWidget(69,this.width / 2 - 124, this.height / 4 + 48, 20, 20, ""){
                 @Override
                 public void method_18374(double d, double e) {
-                    System.out.println(1);
                     if (hasShiftDown()) {
                         client.openScreen(new AutoResetOptionScreen(null));
                     } else {
@@ -53,7 +52,7 @@ public abstract class TitleScreenMixin extends Screen {
     }
 
     private void getDifficulty() {
-        if(Atum.isHardcore) {
+        if(Atum.difficulty==-1) {
             difficulty = "Hardcore: ON";
         }
         else {

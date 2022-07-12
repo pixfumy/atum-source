@@ -51,10 +51,10 @@ public abstract class CreateWorldScreenMixin extends Screen{
     @Inject(method = "init", at = @At("TAIL"))
     private void createDesiredWorld(CallbackInfo info) {
         if (Atum.isRunning) {
-            if(Atum.isHardcore){
+            if(Atum.difficulty==-1){
                 hardcore=true;
             }
-            levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty()?"Random":"Set")+"Speedrun #" + Atum.getNextAttempt());
+
             createLevel();
         }
     }
@@ -76,19 +76,27 @@ public abstract class CreateWorldScreenMixin extends Screen{
                 l = (long)string.hashCode();
             }
         }
-
-        LevelInfo levelInfo = new LevelInfo(l, GameMode.setGameModeWithString(this.gamemodeName), this.structures, this.hardcore, LevelGeneratorType.TYPES[this.generatorType]);
+        if(Atum.seed==null|| Atum.seed.isEmpty()){
+            Atum.rsgAttempts++;
+        }
+        else {
+            Atum.ssgAttempts++;
+        }
+        this.field_20472 = new NbtCompound();
+        LevelInfo levelInfo = new LevelInfo(l, GameMode.setGameModeWithString(this.gamemodeName), Atum.structures, this.hardcore, LevelGeneratorType.TYPES[Atum.generatorType]);
         levelInfo.method_16395((JsonElement) Dynamic.convert(class_4372.field_21487, JsonOps.INSTANCE, this.field_20472));
-        if (this.bonusChest && !this.hardcore) {
+        if (Atum.bonusChest && !this.hardcore) {
             levelInfo.setBonusChest();
         }
-
         if (this.tweakedCheats && !this.hardcore) {
             levelInfo.enableCommands();
         }
+        Atum.saveProperties();
+        Atum.log(Level.INFO,(Atum.seed==null|| Atum.seed.isEmpty()?"Resetting a random seed":"Resetting the set seed"+"\""+l+"\""));
+        levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty())?"Random Speedrun #" + Atum.rsgAttempts:"Set Speedrun #" + Atum.ssgAttempts);
         this.client.startGame(levelNameField.getText(), levelNameField.getText(), levelInfo);
 
-        Atum.log(Level.INFO,(Atum.seed==null|| Atum.seed.isEmpty()?"Resetting a random seed":"Resetting the set seed"+"\""+l+"\""));
+
 
     }
 }
