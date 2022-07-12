@@ -1,6 +1,7 @@
 package me.voidxwalker.autoreset.mixin.hotkey;
 
 import me.voidxwalker.autoreset.Atum;
+import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.*;
@@ -36,6 +37,8 @@ public abstract class MinecraftClientMixin {
     @Shadow @Final private Window window;
 
     @Shadow public abstract void setScreen(@Nullable Screen screen);
+
+    @Shadow @Final public Keyboard keyboard;
 
     @Inject(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V",at = @At(value = "INVOKE",target = "Lnet/minecraft/server/ServerNetworkIo;bindLocal()Ljava/net/SocketAddress;",shift = At.Shift.BEFORE))
     public void atum_trackPostWorldGen(CallbackInfo ci){
@@ -99,6 +102,7 @@ public abstract class MinecraftClientMixin {
         if(Atum.hotkeyPressed&&Atum.hotkeyState==Atum.HotkeyState.WORLD_GEN){
             if(currentScreen instanceof LevelLoadingScreen){
                 ButtonWidget b=null;
+                keyboard.onKey(this.window.getHandle(),256,1,1,0);
                 if(!currentScreen.children().isEmpty()){
                     for (Element e: currentScreen.children() ) {
                         if(e instanceof ButtonWidget){
