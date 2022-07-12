@@ -8,6 +8,7 @@
     "DebugHudMixin",
     "LevelLoadingScreenMixin",
     "TitleScreenMixin",
+    "SettingsScreenMixin",
     "hotkey.KeyBindingAccessor",
     "hotkey.KeyboardMixin",
     "hotkey.MinecraftClientMixin",
