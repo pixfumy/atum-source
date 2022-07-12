@@ -7,8 +7,13 @@
     "CreateWorldScreenMixin",
     "DebugHudMixin",
     "LevelLoadingScreenMixin",
-    "SettingsScreenMixin",
-    "TitleScreenMixin"
+    "TitleScreenMixin",
+    "hotkey.KeyBindingAccessor",
+    "hotkey.KeyboardMixin",
+    "hotkey.MinecraftClientMixin",
+    "hotkey.ClientPlayerNetworkHandlerMixin",
+    "hotkey.GameOptionsMixin",
+    "hotkey.MinecraftServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
