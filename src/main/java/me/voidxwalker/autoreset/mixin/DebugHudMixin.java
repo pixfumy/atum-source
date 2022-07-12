@@ -21,6 +21,15 @@ public class DebugHudMixin implements Pingable {
         if(Atum.isRunning){
             List<String> returnValue = info.getReturnValue();
             returnValue.add("Resetting "+(Atum.seed==null|| Atum.seed.isEmpty()?"a random seed":("the seed: \""+ Atum.seed+"\"")));
+            if(Atum.generatorType!=0){
+                returnValue.add("GenType:" + GeneratorTypeAccessor.getVALUES().get(Atum.generatorType).getTranslationKey().getString());
+            }
+            if(!Atum.structures){
+                returnValue.add("NoStructures");
+            }
+            if(Atum.bonusChest){
+                returnValue.add("BonusChest");
+            }
         }
     }
     @Override
