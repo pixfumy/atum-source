@@ -109,9 +109,10 @@ public abstract class MinecraftClientMixin {
     public void atum_tickDuringWorldGen( CallbackInfo ci){
         if(Atum.hotkeyPressed&&Atum.hotkeyState==Atum.HotkeyState.WORLD_GEN){
             if(currentScreen instanceof LevelLoadingScreen){
-                keyboard.onKey(this.window.getHandle(),256,1,1,0);
                 ButtonWidget b=null;
-                if(!currentScreen.children().isEmpty()){
+                if(currentScreen.children().isEmpty()) {
+                    keyboard.onKey(this.window.getHandle(),256,1,1,0);
+                }
                     for (Element e: currentScreen.children() ) {
                         if(e instanceof ButtonWidget){
                             if( ((ButtonWidget)e).getMessage().equals(new TranslatableText("menu.returnToMenu"))){
@@ -121,14 +122,12 @@ public abstract class MinecraftClientMixin {
                             }
                         }
                     }
-
                     if(b!=null){
                         Atum.resetKey.setPressed(false);
                         Atum.hotkeyPressed=false;
                         b.onPress();
                     }
                 }
-            }
         }
     }
 }

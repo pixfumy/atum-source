@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.IOException;
+
 @Mixin(CreateWorldScreen.class)
 public abstract class CreateWorldScreenMixin {
     @Shadow public boolean hardcore;
@@ -26,7 +28,7 @@ public abstract class CreateWorldScreenMixin {
     @Shadow @Final public MoreOptionsDialog moreOptionsDialog;
 
     @Inject(method = "init", at = @At("TAIL"))
-    private void atum_createDesiredWorld(CallbackInfo info) {
+    private void atum_createDesiredWorld(CallbackInfo info) throws IOException {
         if (Atum.isRunning) {
             Difficulty difficulty;
             switch (Atum.difficulty) {
