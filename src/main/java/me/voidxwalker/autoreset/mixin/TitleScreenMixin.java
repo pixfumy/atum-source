@@ -22,13 +22,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
     private ButtonWidget resetButton;
-    private Text difficulty;
     private static final Identifier BUTTON_IMAGE = new Identifier("textures/item/golden_boots.png");
 
     protected TitleScreenMixin(Text title) {
         super(title);
     }
-
+    @Inject(method = "<init>()V",at = @At("TAIL"))
+    public void resetHotkey(CallbackInfo ci){
+        Atum.resetKey.setPressed(false);
+        Atum.hotkeyPressed=false;
+    }
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo info) {
         if (Atum.isRunning) {
