@@ -113,7 +113,6 @@ public abstract class MinecraftClientMixin {
                             }
                         }
                     }
-
                     if(b!=null){
                         Atum.resetKey.setPressed(false);
                         Atum.hotkeyPressed=false;
