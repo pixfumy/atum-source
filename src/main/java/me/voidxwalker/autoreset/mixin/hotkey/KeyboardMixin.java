@@ -16,7 +16,7 @@ public class KeyboardMixin {
         if(Atum.hasClicked) {
             if(Atum.resetKey.matchesKey(key,scancode)&&!Atum.hotkeyHeld){
                 Atum.hotkeyHeld=true;
-                Atum.resetKey.setPressed(true);
+                KeyBinding.setKeyPressed( HashBiMap.create( KeyBindingAccessor.getKeysByCode()).inverse().get(Atum.resetKey),true);
                 Atum.hotkeyPressed=true;
             }
             else if(Atum.hotkeyHeld){

@@ -1,11 +1,14 @@
 package me.voidxwalker.autoreset.mixin;
 
+import com.google.common.collect.HashBiMap;
 import me.voidxwalker.autoreset.Atum;
+import me.voidxwalker.autoreset.mixin.hotkey.KeyBindingAccessor;
 import me.voidxwalker.autoreset.screen.AutoResetOptionScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.options.KeyBinding;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -27,7 +30,8 @@ public class TitleScreenMixin extends Screen {
 
     @Inject(method = "<init>()V",at = @At("TAIL"))
     public void resetHotkey(CallbackInfo ci){
-        Atum.resetKey.setPressed(false);
+        KeyBinding.setKeyPressed( HashBiMap.create( KeyBindingAccessor.getKeysByCode()).inverse().get(Atum.resetKey),true);
+
         Atum.hotkeyPressed=false;
     }
     @Inject(method = "init", at = @At("TAIL"))

@@ -10,6 +10,8 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.world.level.LevelGeneratorType;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+
 
 public class AutoResetOptionScreen extends Screen{
     private final Screen parent;
@@ -63,7 +65,11 @@ public class AutoResetOptionScreen extends Screen{
             Atum.structures=this.structures;
             Atum.bonusChest=this.bonusChest;
             Atum.generatorType=this.generatorType;
-            Atum.saveProperties();
+            try {
+                Atum.saveProperties();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             this.minecraft.openScreen(this.parent);
         }));
         this.addButton(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel"), (buttonWidget) -> this.minecraft.openScreen(this.parent)));
