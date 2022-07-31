@@ -9,6 +9,7 @@
     "GeneratorTypeAccessor",
     "LevelLoadingScreenMixin",
     "MoreOptionsDialogMixin",
+    "hotkey.MouseMixin",
     "OptionsScreenMixin",
     "TitleScreenMixin",
     "hotkey.KeyBindingAccessor",
