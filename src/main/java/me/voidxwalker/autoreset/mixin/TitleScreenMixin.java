@@ -27,6 +27,11 @@ public class TitleScreenMixin extends Screen {
     protected TitleScreenMixin(Text title) {
         super(title);
     }
+    @Inject(method = "<init>()V",at = @At("TAIL"))
+    public void resetHotkey(CallbackInfo ci){
+        Atum.resetKey.setPressed(false);
+        Atum.hotkeyPressed=false;
+    }
 
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo info) {

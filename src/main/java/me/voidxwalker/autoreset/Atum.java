@@ -1,7 +1,6 @@
 package me.voidxwalker.autoreset;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.gui.screen.LevelLoadingScreen;
@@ -17,7 +16,10 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.*;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Scanner;
 
 public class Atum implements ModInitializer {
     public static boolean isRunning = false;
@@ -37,6 +39,7 @@ public class Atum implements ModInitializer {
     public static KeyBinding resetKey;
     public static HotkeyState hotkeyState;
     public static boolean hotkeyPressed;
+    public static boolean hasClicked = false;
     public static boolean hotkeyHeld;
 
     public static void log(Level level, String message) {
@@ -131,8 +134,8 @@ public class Atum implements ModInitializer {
             return null;
         }
     }
-    public static void saveProperties(){
-        try(FileOutputStream f = new FileOutputStream(configFile)) {
+    public static void saveProperties() throws IOException {
+        try(FileWriter f = new FileWriter(configFile)) {
             Properties properties = new Properties();
             properties.put("rsgAttempts",String.valueOf(rsgAttempts));
             properties.put("ssgAttempts",String.valueOf(ssgAttempts));
@@ -142,7 +145,6 @@ public class Atum implements ModInitializer {
             properties.put("structures",String.valueOf(structures));
             properties.put("bonusChest",String.valueOf(bonusChest));
             properties.putAll(extraProperties);
-
             properties.store(f,"This is the config file for Atum.\nseed: leave empty for a random seed\ndifficulty: -1 = HARDCORE, 0 = PEACEFUL, 1 = EASY, 2= NORMAL, 3= HARD \ngeneratorType: 0 = DEFAULT, 1= FLAT, 2= LARGE_BIOMES, 3 = AMPLIFIED, 4 = SINGLE_BIOME_SURFACE, 5 = SINGLE_BIOME_CAVES, 6 =SINGLE_BIOME_FLOATING_ISLANDS");
         } catch (IOException e) {
             log(Level.WARN, "Could not save config file:\n" + e.getMessage());
@@ -151,7 +153,7 @@ public class Atum implements ModInitializer {
     static void loadFromProperties(Properties properties){
         if(properties!=null){
             for (Map.Entry<Object,Object> entry: properties.entrySet()) {
-                if(!entry.getKey().equals("seed")&&!entry.getKey().equals("difficulty")&&!entry.getKey().equals("generatorType")&&!entry.getKey().equals("attempts")&&!entry.getKey().equals("structures")&&!entry.getKey().equals("bonusChest")){
+                if(!entry.getKey().equals("seed")&&!entry.getKey().equals("difficulty")&&!entry.getKey().equals("generatorType")&&!entry.getKey().equals("rsgAttempts")&&!entry.getKey().equals("ssgAttempts")&&!entry.getKey().equals("structures")&&!entry.getKey().equals("bonusChest")){
                     extraProperties.put((String)entry.getKey(),(String)entry.getValue());
                 }
             }
@@ -169,7 +171,7 @@ public class Atum implements ModInitializer {
                 difficulty = 1;
             }
             try{
-                generatorType =properties==null||!properties.containsKey("generatorType")?0:Integer.parseInt(properties.getProperty("generatorType"));
+                generatorType = !properties.containsKey("generatorType") ?0:Integer.parseInt(properties.getProperty("generatorType"));
             } catch (NumberFormatException e) {
                 generatorType=0;
             }
@@ -177,17 +179,17 @@ public class Atum implements ModInitializer {
                 generatorType = 0;
             }
             try{
-                rsgAttempts =properties==null||!properties.containsKey("rsgAttempts")?0:Integer.parseInt(properties.getProperty("rsgAttempts"));
+                rsgAttempts = !properties.containsKey("rsgAttempts") ?0:Integer.parseInt(properties.getProperty("rsgAttempts"));
             } catch (NumberFormatException e) {
                 rsgAttempts=0;
             }
             try{
-                ssgAttempts =properties==null||!properties.containsKey("ssgAttempts")?0:Integer.parseInt(properties.getProperty("ssgAttempts"));
+                ssgAttempts = !properties.containsKey("ssgAttempts") ?0:Integer.parseInt(properties.getProperty("ssgAttempts"));
             } catch (NumberFormatException e) {
                 ssgAttempts=0;
             }
-            structures = properties == null || !properties.containsKey("structures") || Boolean.parseBoolean(properties.getProperty("structures"));
-            bonusChest = properties != null &&  Boolean.parseBoolean(properties.getProperty("bonusChest"));
+            structures = !properties.containsKey("structures") || Boolean.parseBoolean(properties.getProperty("structures"));
+            bonusChest = Boolean.parseBoolean(properties.getProperty("bonusChest"));
         }
 
     }
