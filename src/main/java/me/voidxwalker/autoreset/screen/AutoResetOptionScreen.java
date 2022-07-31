@@ -12,6 +12,8 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.world.Difficulty;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+
 
 public class AutoResetOptionScreen extends Screen{
     private final Screen parent;
@@ -80,7 +82,11 @@ public class AutoResetOptionScreen extends Screen{
             Atum.structures=this.structures;
             Atum.bonusChest=this.bonusChest;
             Atum.generatorType=this.generatorType;
-            Atum.saveProperties();
+            try {
+                Atum.saveProperties();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             this.client.setScreen(this.parent);
         }));
         this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, ScreenTexts.CANCEL, (buttonWidget) -> this.client.setScreen(this.parent)));
