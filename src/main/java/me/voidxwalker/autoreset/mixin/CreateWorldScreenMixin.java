@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.IOException;
 import java.util.Random;
 
 
@@ -41,7 +42,7 @@ public abstract class CreateWorldScreenMixin {
         }
     }
     @Redirect(method = "createLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;getText()Ljava/lang/String;",ordinal = 0))
-    private String injected(TextFieldWidget instance) {
+    private String injected(TextFieldWidget instance) throws IOException {
         if(!Atum.isRunning){
             return instance.getText();
         }
