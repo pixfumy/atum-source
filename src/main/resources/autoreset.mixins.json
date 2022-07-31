@@ -11,6 +11,7 @@
     "SettingsScreenMixin",
     "hotkey.KeyBindingAccessor",
     "hotkey.KeyboardMixin",
+    "hotkey.MouseMixin",
     "hotkey.MinecraftClientMixin",
     "hotkey.ClientPlayerNetworkHandlerMixin",
     "hotkey.GameOptionsMixin",
