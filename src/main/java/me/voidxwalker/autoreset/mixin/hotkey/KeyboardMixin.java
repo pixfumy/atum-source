@@ -7,8 +7,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.concurrent.SynchronousQueue;
-
 @Mixin(Keyboard.class)
 public class KeyboardMixin {
     @Inject(method = "onKey",at = @At("HEAD"))

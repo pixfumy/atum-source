@@ -4,21 +4,15 @@ import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.mixin.GeneratorTypeAccessor;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
-import net.minecraft.client.gui.screen.world.CreateWorldScreen;
-import net.minecraft.client.gui.screen.world.MoreOptionsDialog;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.world.GeneratorType;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.world.Difficulty;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Optional;
 
 
 public class AutoResetOptionScreen extends Screen{
