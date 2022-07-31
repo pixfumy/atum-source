@@ -80,4 +80,8 @@ public abstract class CreateWorldScreenMixin {
     public void setGenerateBonusChest(boolean generate){
         this.bonusChest=generate;
     }
+    @Inject(method = "createLevel",at = @At("HEAD"))
+    public void atum_trackResetting(CallbackInfo ci){
+        Atum.hotkeyState= Atum.HotkeyState.RESETTING;
+    }
 }

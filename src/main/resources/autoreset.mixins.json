@@ -12,6 +12,7 @@
     "hotkey.KeyBindingAccessor",
     "hotkey.KeyboardMixin",
     "hotkey.MinecraftClientMixin",
+    "hotkey.MouseMixin",
     "hotkey.ClientPlayerNetworkHandlerMixin",
     "hotkey.GameOptionsMixin",
     "hotkey.MinecraftServerMixin"
