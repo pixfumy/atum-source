@@ -13,14 +13,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class KeyboardMixin {
     @Inject(method = "onKey",at = @At("HEAD"))
     public void atum_onKey(long window, int key, int scancode, int i, int j, CallbackInfo ci){
-        if(Atum.resetKey.matchesKey(key,scancode)&&!Atum.hotkeyHeld){
-            Atum.hotkeyHeld=true;
-
-            KeyBinding.setKeyPressed( HashBiMap.create( KeyBindingAccessor.getKeysByCode()).inverse().get(Atum.resetKey),true);
-            Atum.hotkeyPressed=true;
-        }
-        else {
-            Atum.hotkeyHeld=false;
+        if(Atum.hasClicked) {
+            if(Atum.resetKey.matchesKey(key,scancode)&&!Atum.hotkeyHeld){
+                Atum.hotkeyHeld=true;
+                Atum.resetKey.setPressed(true);
+                Atum.hotkeyPressed=true;
+            }
+            else if(Atum.hotkeyHeld){
+                Atum.hotkeyHeld=false;
+            }
         }
     }
 }

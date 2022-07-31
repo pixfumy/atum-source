@@ -13,6 +13,7 @@
     "hotkey.KeyboardMixin",
     "hotkey.MinecraftClientMixin",
     "hotkey.ClientPlayerNetworkHandlerMixin",
+    "hotkey.MouseMixin",
     "hotkey.GameOptionsMixin",
     "hotkey.MinecraftServerMixin"
   ],

@@ -14,4 +14,8 @@ public class MinecraftServerMixin {
     public void trackWorldGenStart(WorldGenerationProgressListener worldGenerationProgressListener, CallbackInfo ci){
         Atum.hotkeyState= Atum.HotkeyState.WORLD_GEN;
     }
+    @Inject(method="run",at=@At(value="INVOKE",target="Lnet/minecraft/server/MinecraftServer;setupServer()Z",shift = At.Shift.AFTER), cancellable = true)
+    public void worldpreview_kill2(CallbackInfo ci){
+        Atum.hotkeyState= Atum.HotkeyState.POST_WORLDGEN;
+    }
 }
