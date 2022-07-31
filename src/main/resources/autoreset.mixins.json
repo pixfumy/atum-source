@@ -10,6 +10,7 @@
     "LevelLoadingScreenMixin",
     "MoreOptionsDialogMixin",
     "OptionsScreenMixin",
+    "hotkey.MouseMixin",
     "TitleScreenMixin",
     "hotkey.KeyBindingAccessor",
     "hotkey.KeyboardMixin",
