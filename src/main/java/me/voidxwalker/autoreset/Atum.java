@@ -1,6 +1,7 @@
 package me.voidxwalker.autoreset;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.gui.screen.LevelLoadingScreen;
@@ -16,19 +17,17 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
 
 public class Atum implements ModInitializer {
     public static boolean isRunning = false;
     public static Logger LOGGER = LogManager.getLogger();
-
+    public static boolean loopPrevent = false;
     public static String seed="";
     public static int difficulty = 1;
     public static int generatorType = 0;
     public static int rsgAttempts;
+    public static boolean hasClicked = false;
     public static int ssgAttempts;
     public static boolean structures=true;
     public static boolean bonusChest=false;
@@ -39,7 +38,6 @@ public class Atum implements ModInitializer {
     public static KeyBinding resetKey;
     public static HotkeyState hotkeyState;
     public static boolean hotkeyPressed;
-    public static boolean hasClicked = false;
     public static boolean hotkeyHeld;
 
     public static void log(Level level, String message) {
@@ -53,6 +51,7 @@ public class Atum implements ModInitializer {
             return new TranslatableText(path);
         }
     }
+
 
     @Override
     public void onInitialize() {

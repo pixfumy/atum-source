@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.IOException;
 import java.util.Random;
 
 
@@ -46,7 +47,11 @@ public abstract class CreateWorldScreenMixin {
             else {
                 Atum.ssgAttempts++;
             }
-            Atum.saveProperties();
+            try {
+                Atum.saveProperties();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty())?"Random Speedrun #" + Atum.rsgAttempts:"Set Speedrun #" + Atum.ssgAttempts);
             setGeneratorType(Atum.generatorType);
             setGenerateStructure(Atum.structures);
