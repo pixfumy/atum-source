@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.IOException;
+
 @Mixin(CreateWorldScreen.class)
 public abstract class CreateWorldScreenMixin {
     @Shadow public boolean hardcore;
@@ -60,7 +62,11 @@ public abstract class CreateWorldScreenMixin {
                 Atum.ssgAttempts++;
             }
 
-            Atum.saveProperties();
+            try {
+                Atum.saveProperties();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty())?"Random Speedrun #" + Atum.rsgAttempts:"Set Speedrun #" + Atum.ssgAttempts);
             ((IMoreOptionsDialog)moreOptionsDialog).setGeneratorType(GeneratorTypeAccessor.getVALUES().get(Atum.generatorType));
             ((IMoreOptionsDialog)moreOptionsDialog).setGenerateStructure(Atum.structures);
