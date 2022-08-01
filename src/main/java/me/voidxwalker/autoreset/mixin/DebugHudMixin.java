@@ -3,7 +3,7 @@ package me.voidxwalker.autoreset.mixin;
 import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.Pingable;
 import net.minecraft.client.gui.hud.DebugHud;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +23,25 @@ public class DebugHudMixin implements Pingable {
             List<String> returnValue = info.getReturnValue();
             returnValue.add("Resetting "+(Atum.seed==null|| Atum.seed.isEmpty()?"a random seed":("the seed: \""+ Atum.seed+"\"")));
             if(Atum.generatorType!=0){
-                returnValue.add(new LiteralText("").append("GenType:").append(GeneratorTypeAccessor.getVALUES().get(Atum.generatorType).getDisplayName()).asString());
+                String s=null;
+                switch (Atum.generatorType){
+                    case 1:
+                        s="flat";
+                        break;
+                    case 2:
+                        s="large_biomes";
+                        break;
+                    case 3:
+                        s="amplified";
+                        break;
+                    case 4:
+                        s="single_biome_surface";
+                        break;
+                }
+                if(s!=null){
+                    returnValue.add(Text.empty().append("GenType:").append(s).getString());
+                }
+
             }
             if(!Atum.structures){
                 returnValue.add("NoStructures");

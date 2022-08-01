@@ -6,9 +6,7 @@ import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.gui.screen.LevelLoadingScreen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Language;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -48,9 +46,9 @@ public class Atum implements ModInitializer {
 
     public static Text getTranslation(String path, String text){
         if (Language.getInstance().get(path).equals(path)) {
-            return  new LiteralText(text);
+            return  Text.of(text);
         } else {
-            return new TranslatableText(path);
+            return Text.translatable(path);
         }
     }
 
