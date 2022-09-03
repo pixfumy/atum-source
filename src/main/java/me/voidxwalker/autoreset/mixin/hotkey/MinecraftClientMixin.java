@@ -59,7 +59,7 @@ public abstract class MinecraftClientMixin {
                 ButtonWidget b=null;
                 for (Element e: s.children() ) {
                     if(e instanceof ButtonWidget){
-                        if( ((ButtonWidget)e).getMessage().equals(new TranslatableText("menu.quitWorld"))){
+                        if( ((ButtonWidget)e).getMessage().equals(new TranslatableText( "menu.quitWorld").asString())){
                             if(b==null){
                                 b =(ButtonWidget)e;
                             }
@@ -106,9 +106,10 @@ public abstract class MinecraftClientMixin {
                 keyboard.onKey(this.window.getHandle(),256,1,1,0);
                 ButtonWidget b=null;
                 if(!currentScreen.children().isEmpty()){
+                    System.out.println(4L);
                     for (Element e: currentScreen.children() ) {
                         if(e instanceof ButtonWidget){
-                            if( ((ButtonWidget)e).getMessage().equals(new TranslatableText("menu.returnToMenu"))){
+                            if( ((ButtonWidget)e).getMessage().equals(new TranslatableText( "menu.returnToMenu").asString())){
                                 if(b==null){
                                     b =(ButtonWidget)e;
                                 }
