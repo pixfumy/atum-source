@@ -27,6 +27,7 @@ public abstract class TitleScreenMixin extends Screen {
             Atum.loopPrevent2=false;
             client.openScreen(new CreateWorldScreen(this));
         } else {
+            Atum.hotkeyState= Atum.HotkeyState.OUTSIDE_WORLD;
             method_13411(new ButtonWidget(69,this.width / 2 - 124, this.height / 4 + 48, 20, 20, ""){
                 @Override
                 public void method_18374(double d, double e) {
