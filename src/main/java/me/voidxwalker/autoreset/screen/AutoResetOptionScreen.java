@@ -1,7 +1,6 @@
 package me.voidxwalker.autoreset.screen;
 
 import me.voidxwalker.autoreset.Atum;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -28,11 +27,12 @@ public class AutoResetOptionScreen extends Screen{
         this.parent = parent;
     }
 
-    protected void init() {
-        this.client.field_19946.method_18191(true);
+    public void init() {
+
         this.isHardcore=Atum.difficulty==-1;
         this.seedField = new TextFieldWidget(350,this.client.textRenderer, this.width / 2 - 100, this.height - 160, 200, 20) {};
         this.seedField.setText(Atum.seed==null?"":Atum.seed);
+        this.seedField.setFocused(true);
         this.seed=Atum.seed;
         this.generatorType=Atum.generatorType;
         this.structures=Atum.structures;
@@ -40,54 +40,38 @@ public class AutoResetOptionScreen extends Screen{
 
         this.method_13411(new ButtonWidget(340,this.width / 2 + 5, this.height - 100, 150, 20, new LiteralText("Is Hardcore: "+isHardcore).asString()){
             public void method_18374(double d, double e) {
-                isHardcore=!isHardcore;
-                this.message=("Is Hardcore: "+isHardcore);
+
             }
 
         });
         this.method_13411(new ButtonWidget(341,this.width / 2 - 155, this.height - 100, 150, 20, new TranslatableText("selectWorld.mapType").asString()+" "+ LevelGeneratorType.TYPES[generatorType].getTranslationKey()) {
             public void method_18374(double d, double e) {
-                generatorType++;
-                if(generatorType>5){
-                    generatorType=0;
-                }
-                this.message=(new TranslatableText("selectWorld.mapType").asString()+" "+LevelGeneratorType.TYPES[generatorType].getTranslationKey());
 
             }
         });
 
         this.method_13411(new ButtonWidget(342,this.width / 2 - 155, this.height - 64, 150, 20,  new TranslatableText("selectWorld.mapFeatures").asString()+" "+structures) {
             public void method_18374(double d, double e) {
-                structures=!structures;
-                this.message=(new TranslatableText("selectWorld.mapFeatures").asString()+" "+structures);
-            }
+                }
 
 
         });
 
         this.method_13411(new ButtonWidget(344,this.width / 2 + 5, this.height - 64, 150, 20, new TranslatableText("selectWorld.bonusItems").asString()+" "+bonusChest){
             public void method_18374(double d, double e) {
-                bonusChest=!bonusChest;
-                this.message=( new TranslatableText("selectWorld.bonusItems").asString()+" "+bonusChest);
-            }
+                }
 
         });
 
         this.method_13411(new ButtonWidget(345,this.width / 2 - 155, this.height - 28, 150, 20, Atum.getTranslation("menu.done","Done").asString()){
             public void method_18374(double d, double e) {
-                Atum.seed=seed;
-                Atum.difficulty=isHardcore?-1:0;
-                Atum.structures=structures;
-                Atum.bonusChest=bonusChest;
-                Atum.generatorType=generatorType;
-                Atum.saveProperties();
-                client.openScreen(parent);
+
             }
 
         });
         this.method_13411(new ButtonWidget(343,this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel")){
             public void method_18374(double d, double e) {
-                client.openScreen(parent);
+
             }
         });
     }
@@ -101,18 +85,57 @@ public class AutoResetOptionScreen extends Screen{
         drawCenteredString(client.textRenderer, this.title, this.width / 2, this.height - 210, -1);
         this.drawWithShadow( client.textRenderer, "Seed (Leave empty for a random Seed)", this.width / 2 - 100, this.height - 180, -6250336);
 
-        this.seedField.method_18385(mouseX, mouseY, delta);
+        this.seedField.render();
         super.render(mouseX, mouseY, delta);
     }
 
 
-    public boolean keyPressed(int i, int j, int k) {
+    public void keyPressed(char character, int code) {
         if (this.seedField.isFocused()) {
-            this.seedField.keyPressed(i,j,k);
+            this.seedField.keyPressed(character,code);
             this.seed = this.seedField.getText();
-            return true;
+
         }
 
-        return false;
+
+
+
+
+    }
+    protected void buttonClicked(ButtonWidget button) {
+        switch (button.id) {
+            case 340:
+                isHardcore = !isHardcore;
+                button.message = ("Is Hardcore: " + isHardcore);
+                break;
+            case 341:
+                generatorType++;
+                if (generatorType > 5) {
+                    generatorType = 0;
+                }
+                button.message = (new TranslatableText("selectWorld.mapType").asString() + " " + LevelGeneratorType.TYPES[generatorType].getTranslationKey());
+                break;
+            case 342:
+                structures = !structures;
+                button.message = (new TranslatableText("selectWorld.mapFeatures").asString() + " " + structures);
+                break;
+            case 344:
+                bonusChest = !bonusChest;
+                button.message = (new TranslatableText("selectWorld.bonusItems").asString() + " " + bonusChest);
+                break;
+            case 345:
+                Atum.seed = seed;
+                Atum.difficulty = isHardcore ? -1 : 0;
+                Atum.structures = structures;
+                Atum.bonusChest = bonusChest;
+                Atum.generatorType = generatorType;
+                Atum.saveProperties();
+                client.openScreen(parent);
+                break;
+            case 343:
+                client.openScreen(parent);
+                break;
+
+        }
     }
 }

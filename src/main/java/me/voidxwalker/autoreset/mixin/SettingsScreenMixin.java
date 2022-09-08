@@ -25,22 +25,28 @@ public class SettingsScreenMixin extends Screen {
         if(Atum.isRunning){
             this.method_13411(new ButtonWidget(1238,0, this.height - 20, 100, 20, "Stop Resets & Quit") {
                 public void method_18374(double d, double e) {
-                    Atum.isRunning=false;
-                    boolean bl = MinecraftClient.getInstance().isIntegratedServerRunning();
-                    boolean bl2 = MinecraftClient.getInstance().isConnectedToRealms();
-                    MinecraftClient.getInstance().world.disconnect();
-                    MinecraftClient.getInstance().connect((ClientWorld)null);
-                    if (bl) {
-                        MinecraftClient.getInstance().openScreen(new TitleScreen());
-                    } else if (bl2) {
-                        RealmsBridge realmsBridge = new RealmsBridge();
-                        realmsBridge.switchToRealms(new TitleScreen());
-                    } else {
-                        MinecraftClient.getInstance().openScreen(new MultiplayerScreen(new TitleScreen()));
-                    }
+
                 }
 
             });
+        }
+    }
+    @Inject(method = "buttonClicked",at = @At("HEAD"))
+    public void buttonClicked(ButtonWidget button, CallbackInfo ci){
+        if(button.id==1238){
+            Atum.isRunning=false;
+            boolean bl = MinecraftClient.getInstance().isIntegratedServerRunning();
+            boolean bl2 = MinecraftClient.getInstance().isConnectedToRealms();
+            MinecraftClient.getInstance().world.disconnect();
+            MinecraftClient.getInstance().connect((ClientWorld)null);
+            if (bl) {
+                MinecraftClient.getInstance().openScreen(new TitleScreen());
+            } else if (bl2) {
+                RealmsBridge realmsBridge = new RealmsBridge();
+                realmsBridge.switchToRealms(new TitleScreen());
+            } else {
+                MinecraftClient.getInstance().openScreen(new MultiplayerScreen(new TitleScreen()));
+            }
         }
     }
 }

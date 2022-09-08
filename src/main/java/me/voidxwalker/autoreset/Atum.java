@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -14,7 +15,6 @@ import net.minecraft.util.Language;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
 
 import java.io.*;
 import java.util.*;
@@ -37,18 +37,15 @@ public class Atum implements ModInitializer {
     public static KeyBinding resetKey;
     public static HotkeyState hotkeyState;
     public static boolean hotkeyPressed;
-    public static boolean hotkeyHeld;
+    public static boolean hotkeyHeld=false;
 
     public static void log(Level level, String message) {
         LOGGER.log(level, message);
     }
 
     public static Text getTranslation(String path, String text){
-        if (Language.getInstance().translate(path).equals(path)) {
-            return  new LiteralText(text);
-        } else {
-            return new TranslatableText(path);
-        }
+        return  new LiteralText(text);
+
     }
 
     @Override
@@ -62,7 +59,7 @@ public class Atum implements ModInitializer {
         log(Level.INFO, "Initializing");
         resetKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 getTranslation("key.atum.reset","Create New World").getString(),
-                295,
+                64,
                 getTranslation("key.categories.atum","Atum").getString()
         ));
         new File("config/atum").mkdir();
@@ -105,6 +102,7 @@ public class Atum implements ModInitializer {
         }
         else {
             loadFromProperties(getProperties(configFile));
+            System.out.println(ssgAttempts);
         }
     }
 
@@ -146,11 +144,12 @@ public class Atum implements ModInitializer {
         } catch (IOException e) {
             log(Level.WARN, "Could not save config file:\n" + e.getMessage());
         }
+        System.out.println(ssgAttempts);
     }
     static void loadFromProperties(Properties properties){
         if(properties!=null){
             for (Map.Entry<Object,Object> entry: properties.entrySet()) {
-                if(!entry.getKey().equals("seed")&&!entry.getKey().equals("difficulty")&&!entry.getKey().equals("generatorType")&&!entry.getKey().equals("attempts")&&!entry.getKey().equals("structures")&&!entry.getKey().equals("bonusChest")){
+                if(!entry.getKey().equals("seed")&&!entry.getKey().equals("difficulty")&&!entry.getKey().equals("generatorType")&&!entry.getKey().equals("ssgAttempts")&&!entry.getKey().equals("rsgAttempts")&&!entry.getKey().equals("structures")&&!entry.getKey().equals("bonusChest")){
                     extraProperties.put((String)entry.getKey(),(String)entry.getValue());
                 }
             }

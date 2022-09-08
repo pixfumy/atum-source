@@ -13,11 +13,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.net.URI;
+
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
     private String difficulty;
-    private static final Identifier BUTTON_IMAGE = new Identifier("textures/item/golden_boots.png");
+    private static final Identifier BUTTON_IMAGE = new Identifier("textures/items/gold_boots.png");
 
 
 
@@ -28,17 +30,7 @@ public abstract class TitleScreenMixin extends Screen {
             client.openScreen(new CreateWorldScreen(this));
         } else {
             Atum.hotkeyState= Atum.HotkeyState.OUTSIDE_WORLD;
-            method_13411(new ButtonWidget(69,this.width / 2 - 124, this.height / 4 + 48, 20, 20, ""){
-                @Override
-                public void method_18374(double d, double e) {
-                    if (hasShiftDown()) {
-                        client.openScreen(new AutoResetOptionScreen(null));
-                    } else {
-                        Atum.isRunning = true;
-                        MinecraftClient.getInstance().openScreen(null);
-                    }
-                }
-            });
+            method_13411(new ButtonWidget(69,this.width / 2 - 124, this.height / 4 + 48, 20, 20, ""));
         }
     }
 
@@ -51,7 +43,19 @@ public abstract class TitleScreenMixin extends Screen {
             drawCenteredString(client.textRenderer, difficulty, this.width / 2 - 124+11, this.height / 4 + 48-15, 16777215);
         }
     }
+    @Inject(method = "buttonClicked",at = @At("HEAD"),cancellable = true)
+    public void buttonClicked(ButtonWidget button, CallbackInfo ci){
+        if(button.id==69){
+            if (hasShiftDown()) {
+                client.openScreen(new AutoResetOptionScreen(null));
+            } else {
+                Atum.isRunning = true;
+                MinecraftClient.getInstance().openScreen(null);
+            }
+            ci.cancel();
+        }
 
+    }
     private void getDifficulty() {
         if(Atum.difficulty==-1) {
             difficulty = "Hardcore: ON";
@@ -61,4 +65,5 @@ public abstract class TitleScreenMixin extends Screen {
         }
 
     }
+
 }
