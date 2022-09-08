@@ -150,7 +150,7 @@ public class Atum implements ModInitializer {
     static void loadFromProperties(Properties properties){
         if(properties!=null){
             for (Map.Entry<Object,Object> entry: properties.entrySet()) {
-                if(!entry.getKey().equals("seed")&&!entry.getKey().equals("difficulty")&&!entry.getKey().equals("generatorType")&&!entry.getKey().equals("attempts")&&!entry.getKey().equals("structures")&&!entry.getKey().equals("bonusChest")){
+                if(!entry.getKey().equals("seed")&&!entry.getKey().equals("difficulty")&&!entry.getKey().equals("generatorType")&&!entry.getKey().equals("ssgAttempts")&&!entry.getKey().equals("rsgAttempts")&&!entry.getKey().equals("structures")&&!entry.getKey().equals("bonusChest")){
                     extraProperties.put((String)entry.getKey(),(String)entry.getValue());
                 }
             }
