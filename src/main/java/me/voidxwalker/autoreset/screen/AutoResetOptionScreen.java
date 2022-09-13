@@ -38,42 +38,15 @@ public class AutoResetOptionScreen extends Screen{
         this.structures=Atum.structures;
         this.bonusChest=Atum.bonusChest;
 
-        this.method_13411(new ButtonWidget(340,this.width / 2 + 5, this.height - 100, 150, 20, new LiteralText("Is Hardcore: "+isHardcore).asString()){
-            public void method_18374(double d, double e) {
+        this.buttons.add(new ButtonWidget(340,this.width / 2 + 5, this.height - 100, 150, 20, new LiteralText("Is Hardcore: "+isHardcore).asString()));
+        this.buttons.add(new ButtonWidget(341,this.width / 2 - 155, this.height - 100, 150, 20, new TranslatableText("selectWorld.mapType").asString()+" "+ LevelGeneratorType.TYPES[generatorType].getTranslationKey()) );
 
-            }
+        this.buttons.add(new ButtonWidget(342,this.width / 2 - 155, this.height - 64, 150, 20,  new TranslatableText("selectWorld.mapFeatures").asString()+" "+structures));
 
-        });
-        this.method_13411(new ButtonWidget(341,this.width / 2 - 155, this.height - 100, 150, 20, new TranslatableText("selectWorld.mapType").asString()+" "+ LevelGeneratorType.TYPES[generatorType].getTranslationKey()) {
-            public void method_18374(double d, double e) {
+        this.buttons.add(new ButtonWidget(344,this.width / 2 + 5, this.height - 64, 150, 20, new TranslatableText("selectWorld.bonusItems").asString()+" "+bonusChest));
 
-            }
-        });
-
-        this.method_13411(new ButtonWidget(342,this.width / 2 - 155, this.height - 64, 150, 20,  new TranslatableText("selectWorld.mapFeatures").asString()+" "+structures) {
-            public void method_18374(double d, double e) {
-                }
-
-
-        });
-
-        this.method_13411(new ButtonWidget(344,this.width / 2 + 5, this.height - 64, 150, 20, new TranslatableText("selectWorld.bonusItems").asString()+" "+bonusChest){
-            public void method_18374(double d, double e) {
-                }
-
-        });
-
-        this.method_13411(new ButtonWidget(345,this.width / 2 - 155, this.height - 28, 150, 20, Atum.getTranslation("menu.done","Done").asString()){
-            public void method_18374(double d, double e) {
-
-            }
-
-        });
-        this.method_13411(new ButtonWidget(343,this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel")){
-            public void method_18374(double d, double e) {
-
-            }
-        });
+        this.buttons.add(new ButtonWidget(345,this.width / 2 - 155, this.height - 28, 150, 20, Atum.getTranslation("menu.done","Done").asString()));
+        this.buttons.add(new ButtonWidget(343,this.width / 2 + 5, this.height - 28, 150, 20, I18n.translate("gui.cancel")));
     }
 
     public void tick(){
