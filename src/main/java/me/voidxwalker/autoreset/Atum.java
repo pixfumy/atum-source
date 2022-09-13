@@ -102,7 +102,6 @@ public class Atum implements ModInitializer {
         }
         else {
             loadFromProperties(getProperties(configFile));
-            System.out.println(ssgAttempts);
         }
     }
 

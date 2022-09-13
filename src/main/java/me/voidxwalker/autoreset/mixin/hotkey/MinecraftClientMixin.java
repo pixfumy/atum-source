@@ -57,7 +57,6 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "tick",at = @At("HEAD"),cancellable = true)
     public void atum_tick(CallbackInfo ci){
         if(Atum.hotkeyPressed){
-            System.out.println(1);
             if(Atum.hotkeyState==Atum.HotkeyState.INSIDE_WORLD){
                 Screen s = new GameMenuScreen();
                 Window window = new Window((MinecraftClient) (Object)this);
