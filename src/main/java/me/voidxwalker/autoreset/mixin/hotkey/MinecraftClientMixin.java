@@ -63,7 +63,7 @@ public abstract class MinecraftClientMixin {
         if(Atum.hotkeyPressed){
             if(Atum.hotkeyState==Atum.HotkeyState.INSIDE_WORLD){
                 Screen s = new GameMenuScreen();
-                Window window = new Window((MinecraftClient) (Object)this,this.width,height);
+                Window window = new Window((MinecraftClient) (Object)this);
                 int i = window.getWidth();
                 int j = window.getHeight();
                 s.init( (MinecraftClient) (Object)this, i, j);

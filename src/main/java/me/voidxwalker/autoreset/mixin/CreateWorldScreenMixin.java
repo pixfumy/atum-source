@@ -4,7 +4,6 @@ import me.voidxwalker.autoreset.Atum;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.world.GameMode;
 import net.minecraft.world.level.LevelGeneratorType;
 import net.minecraft.world.level.LevelInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -78,7 +77,7 @@ public abstract class CreateWorldScreenMixin extends Screen{
         else {
             Atum.ssgAttempts++;
         }
-        LevelInfo levelInfo = new LevelInfo(l, GameMode.setGameModeWithString(this.gamemodeName), Atum.structures, this.hardcore, LevelGeneratorType.TYPES[Atum.generatorType]);
+        LevelInfo levelInfo = new LevelInfo(l, LevelInfo.GameMode.byName(this.gamemodeName), Atum.structures, this.hardcore, LevelGeneratorType.TYPES[Atum.generatorType]);
         levelInfo.setGeneratorOptions(this.generatorOptions);
         if (Atum.bonusChest && !this.hardcore) {
             levelInfo.setBonusChest();
