@@ -31,15 +31,11 @@ public class SettingsScreenMixin extends Screen {
         if(button.id==1238){
             Atum.isRunning=false;
             boolean bl = MinecraftClient.getInstance().isIntegratedServerRunning();
-            boolean bl2 = MinecraftClient.getInstance().isConnectedToRealms();
             MinecraftClient.getInstance().world.disconnect();
             MinecraftClient.getInstance().connect((ClientWorld)null);
             if (bl) {
                 MinecraftClient.getInstance().openScreen(new TitleScreen());
-            } else if (bl2) {
-                RealmsBridge realmsBridge = new RealmsBridge();
-                realmsBridge.switchToRealms(new TitleScreen());
-            } else {
+            }  else {
                 MinecraftClient.getInstance().openScreen(new MultiplayerScreen(new TitleScreen()));
             }
         }
