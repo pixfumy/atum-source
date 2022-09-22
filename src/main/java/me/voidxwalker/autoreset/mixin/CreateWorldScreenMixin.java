@@ -2,10 +2,15 @@ package me.voidxwalker.autoreset.mixin;
 
 import me.voidxwalker.autoreset.Atum;
 import me.voidxwalker.autoreset.IMoreOptionsDialog;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.screen.world.MoreOptionsDialog;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.text.Text;
+import net.minecraft.util.registry.DynamicRegistryManager;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.gen.WorldPresets;
 import org.apache.logging.log4j.Level;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,11 +19,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.io.IOException;
+
 
 @Mixin(CreateWorldScreen.class)
-public abstract class CreateWorldScreenMixin {
+public abstract class CreateWorldScreenMixin extends Screen {
     @Shadow public boolean hardcore;
     @Shadow private TextFieldWidget levelNameField;
+
+    protected CreateWorldScreenMixin(Text text) {
+        super(text);
+    }
+
     @Shadow protected abstract void createLevel();
 
     @Shadow private Difficulty currentDifficulty;
@@ -58,13 +70,40 @@ public abstract class CreateWorldScreenMixin {
             else {
                 Atum.ssgAttempts++;
             }
-            Atum.saveProperties();
+            try {
+                Atum.saveProperties();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             currentDifficulty = difficulty;
             levelNameField.setText((Atum.seed==null|| Atum.seed.isEmpty())?"Random Speedrun #" + Atum.rsgAttempts:"Set Speedrun #" + Atum.ssgAttempts);
-            ((IMoreOptionsDialog)moreOptionsDialog).setGeneratorType(GeneratorTypeAccessor.getVALUES().get(Atum.generatorType));
+            switch (Atum.generatorType){
+                case 0:
+                    ((IMoreOptionsDialog)moreOptionsDialog).setGeneratorType(DynamicRegistryManager.createAndLoad().get(Registry.WORLD_PRESET_KEY).entryOf(WorldPresets.DEFAULT).value());
+                    break;
+                case 1:
+
+                    ((IMoreOptionsDialog)moreOptionsDialog).setGeneratorType(DynamicRegistryManager.createAndLoad().get(Registry.WORLD_PRESET_KEY).entryOf(WorldPresets.FLAT).value());
+                    break;
+                case 2:
+                    ((IMoreOptionsDialog)moreOptionsDialog).setGeneratorType(DynamicRegistryManager.createAndLoad().get(Registry.WORLD_PRESET_KEY).entryOf(WorldPresets.LARGE_BIOMES).value());
+                    break;
+                case 3:
+                    ((IMoreOptionsDialog)moreOptionsDialog).setGeneratorType(DynamicRegistryManager.createAndLoad().get(Registry.WORLD_PRESET_KEY).entryOf(WorldPresets.AMPLIFIED).value());
+                    break;
+                case 4:
+                    ((IMoreOptionsDialog)moreOptionsDialog).setGeneratorType(DynamicRegistryManager.createAndLoad().get(Registry.WORLD_PRESET_KEY).entryOf(WorldPresets.SINGLE_BIOME_SURFACE).value());
+
+                    break;
+            }
+
             ((IMoreOptionsDialog)moreOptionsDialog).setGenerateStructure(Atum.structures);
             ((IMoreOptionsDialog)moreOptionsDialog).setGenerateBonusChest(Atum.bonusChest);
             createLevel();
         }
+    }
+    @Inject(method = "createLevel",at = @At("HEAD"))
+    public void atum_trackResetting(CallbackInfo ci){
+        Atum.hotkeyState= Atum.HotkeyState.RESETTING;
     }
 }

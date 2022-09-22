@@ -6,7 +6,6 @@
   "mixins": [
     "CreateWorldScreenMixin",
     "DebugHudMixin",
-    "GeneratorTypeAccessor",
     "LevelLoadingScreenMixin",
     "MoreOptionsDialogMixin",
     "OptionsScreenMixin",

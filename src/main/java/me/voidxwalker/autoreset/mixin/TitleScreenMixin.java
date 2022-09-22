@@ -8,9 +8,7 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.Difficulty;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,19 +20,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
     private ButtonWidget resetButton;
-    private Text difficulty;
     private static final Identifier BUTTON_IMAGE = new Identifier("textures/item/golden_boots.png");
 
     protected TitleScreenMixin(Text title) {
         super(title);
     }
-
+    @Inject(method = "<init>()V",at = @At("TAIL"))
+    public void resetHotkey(CallbackInfo ci){
+        Atum.resetKey.setPressed(false);
+        Atum.hotkeyPressed=false;
+    }
     @Inject(method = "init", at = @At("TAIL"))
     private void init(CallbackInfo info) {
         if (Atum.isRunning) {
-            client.setScreen(CreateWorldScreen.create(this));
+            CreateWorldScreen.create(client,this);
         } else {
-            resetButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, new LiteralText(""), (buttonWidget) -> {
+            resetButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 124, this.height / 4 + 48, 20, 20, Text.empty(), (buttonWidget) -> {
                 if (hasShiftDown()) {
                     client.setScreen(new AutoResetOptionScreen(this));
                 } else {
@@ -56,7 +57,7 @@ public class TitleScreenMixin extends Screen {
 
     Text getDifficultyText(){
         if(Atum.difficulty==-1){
-            return new TranslatableText("selectWorld.gameMode.hardcore");
+            return Text.translatable("selectWorld.gameMode.hardcore");
         }
         return Difficulty.byOrdinal(Atum.difficulty).getTranslatableName();
     }

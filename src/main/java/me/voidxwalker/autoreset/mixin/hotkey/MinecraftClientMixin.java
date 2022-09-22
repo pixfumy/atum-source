@@ -10,7 +10,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,11 +40,11 @@ public abstract class MinecraftClientMixin {
 
     @Shadow @Final public Keyboard keyboard;
 
-    @Inject(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V",at = @At(value = "INVOKE",target = "Lnet/minecraft/server/ServerNetworkIo;bindLocal()Ljava/net/SocketAddress;",shift = At.Shift.BEFORE))
+    @Inject(method = "startIntegratedServer",at = @At(value = "INVOKE",target = "Lnet/minecraft/server/ServerNetworkIo;bindLocal()Ljava/net/SocketAddress;",shift = At.Shift.BEFORE))
     public void atum_trackPostWorldGen(CallbackInfo ci){
         Atum.hotkeyState= Atum.HotkeyState.POST_WORLDGEN;
     }
-    @Inject(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V",at = @At(value = "HEAD"))
+    @Inject(method = "startIntegratedServer",at = @At(value = "HEAD"))
     public void atum_trackPreWorldGen( CallbackInfo ci){
         Atum.hotkeyState= Atum.HotkeyState.PRE_WORLDGEN;
     }
@@ -57,7 +57,7 @@ public abstract class MinecraftClientMixin {
                 ButtonWidget b=null;
                 for (Element e: s.children() ) {
                     if(e instanceof ButtonWidget){
-                        if( ((ButtonWidget)e).getMessage().equals(new TranslatableText("menu.quitWorld"))){
+                        if( ((ButtonWidget)e).getMessage().equals(Text.translatable("menu.quitWorld"))){
                             if(b==null){
                                 b =(ButtonWidget)e;
                             }
@@ -72,7 +72,7 @@ public abstract class MinecraftClientMixin {
                         boolean bl2 = this.isConnectedToRealms();
                         this.world.disconnect();
                         if (bl) {
-                            this.disconnect(new SaveLevelScreen(new TranslatableText("menu.savingLevel")));
+                            this.disconnect(new MessageScreen(Text.translatable("menu.savingLevel")));
                         } else {
                             this.disconnect();
                         }
@@ -97,7 +97,7 @@ public abstract class MinecraftClientMixin {
             }
         }
     }
-    @Inject(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V",at=@At(value = "INVOKE",shift = At.Shift.AFTER,target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"),cancellable = true)
+    @Inject(method = "startIntegratedServer",at=@At(value = "INVOKE",shift = At.Shift.AFTER,target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"),cancellable = true)
     public void atum_tickDuringWorldGen( CallbackInfo ci){
         if(Atum.hotkeyPressed&&Atum.hotkeyState==Atum.HotkeyState.WORLD_GEN){
             if(currentScreen instanceof LevelLoadingScreen){
@@ -106,7 +106,7 @@ public abstract class MinecraftClientMixin {
                 if(!currentScreen.children().isEmpty()){
                     for (Element e: currentScreen.children() ) {
                         if(e instanceof ButtonWidget){
-                            if( ((ButtonWidget)e).getMessage().equals(new TranslatableText("menu.returnToMenu"))){
+                            if( ((ButtonWidget)e).getMessage().equals(Text.translatable("menu.returnToMenu"))){
                                 if(b==null){
                                     b =(ButtonWidget)e;
                                 }

@@ -1,16 +1,16 @@
 package me.voidxwalker.autoreset.screen;
 
 import me.voidxwalker.autoreset.Atum;
-import me.voidxwalker.autoreset.mixin.GeneratorTypeAccessor;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.world.Difficulty;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
 
 
 public class AutoResetOptionScreen extends Screen{
@@ -37,40 +37,59 @@ public class AutoResetOptionScreen extends Screen{
         this.bonusChest=Atum.bonusChest;
         this.difficulty=Atum.difficulty;
         this.seedField.setChangedListener((string) -> this.seed = string);
-        this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 100, 150, 20, new TranslatableText("options.difficulty"), (buttonWidget) -> {
+        this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 100, 150, 20, Text.translatable("options.difficulty"), (buttonWidget) -> {
             this.difficulty = this.difficulty >= 3 ? -1 : this.difficulty + 1;
         }){
             public Text getMessage() {
                 if(difficulty==-1){
-                    return super.getMessage().shallowCopy().append(": ").append(new TranslatableText("selectWorld.gameMode.hardcore"));
+                    return super.getMessage().copy().append(": ").append(Text.translatable("selectWorld.gameMode.hardcore"));
                 }
-                return super.getMessage().shallowCopy().append(": ").append(Difficulty.byOrdinal(difficulty).getTranslatableName());
+                return super.getMessage().copy().append(": ").append(Difficulty.byOrdinal(difficulty).getTranslatableName());
             }
         });
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 100, 150, 20, new TranslatableText("selectWorld.mapType"), (buttonWidget) -> {
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 100, 150, 20, Text.translatable("selectWorld.mapType"), (buttonWidget) -> {
             generatorType++;
             if(generatorType>6){
                 generatorType=0;
             }
         }){
             public Text getMessage() {
-                return super.getMessage().shallowCopy().append(": ").append(GeneratorTypeAccessor.getVALUES().get(generatorType).getDisplayName());
+                String s=null;
+                switch (Atum.generatorType){
+                    case 0:
+                        s= "default";
+                        break;
+                    case 1:
+                        s="flat";
+                        break;
+                    case 2:
+                        s="large_biomes";
+                        break;
+                    case 3:
+                        s="amplified";
+                        break;
+                    case 4:
+                        s="single_biome_surface";
+                        break;
+                }
+
+                return super.getMessage().copy().append(": ").append(s);
             }
         });
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 64, 150, 20,  new TranslatableText("selectWorld.mapFeatures"), (buttonWidget) -> {
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, this.height - 64, 150, 20,  Text.translatable("selectWorld.mapFeatures"), (buttonWidget) -> {
             this.structures=!structures;
         }){
             public Text getMessage() {
-                return super.getMessage().shallowCopy().append(" ").append(String.valueOf(structures));
+                return super.getMessage().copy().append(" ").append(String.valueOf(structures));
             }
         });
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 64, 150, 20, new TranslatableText("selectWorld.bonusItems"), (buttonWidget) -> {
+        this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 64, 150, 20, Text.translatable("selectWorld.bonusItems"), (buttonWidget) -> {
             this.bonusChest=!bonusChest;
         }){
             public Text getMessage() {
-                return super.getMessage().shallowCopy().append(" ").append(String.valueOf(bonusChest));
+                return super.getMessage().copy().append(" ").append(String.valueOf(bonusChest));
             }
         });
 
@@ -80,7 +99,11 @@ public class AutoResetOptionScreen extends Screen{
             Atum.structures=this.structures;
             Atum.bonusChest=this.bonusChest;
             Atum.generatorType=this.generatorType;
-            Atum.saveProperties();
+            try {
+                Atum.saveProperties();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             this.client.setScreen(this.parent);
         }));
         this.addDrawableChild(new ButtonWidget(this.width / 2 + 5, this.height - 28, 150, 20, ScreenTexts.CANCEL, (buttonWidget) -> this.client.setScreen(this.parent)));
@@ -99,7 +122,7 @@ public class AutoResetOptionScreen extends Screen{
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, this.height - 210, -1);
-        drawStringWithShadow(matrices, this.textRenderer, Atum.getTranslation("menu.enterSeed","Seed (Leave empty for a random Seed)").asString(), this.width / 2 - 100, this.height - 180, -6250336);
+        drawStringWithShadow(matrices, this.textRenderer, Atum.getTranslation("menu.enterSeed","Seed (Leave empty for a random Seed)").getString(), this.width / 2 - 100, this.height - 180, -6250336);
 
         this.seedField.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);

@@ -1,9 +1,9 @@
 package me.voidxwalker.autoreset;
 
-import net.minecraft.client.world.GeneratorType;
+import net.minecraft.world.gen.WorldPreset;
 
 public interface IMoreOptionsDialog {
-    void setGeneratorType(GeneratorType g);
+    void setGeneratorType(WorldPreset g);
     void setGenerateStructure(boolean generate);
     void setGenerateBonusChest(boolean generate);
 }
