@@ -109,7 +109,7 @@ public abstract class MinecraftClientMixin {
                     System.out.println(4L);
                     for (Element e: currentScreen.children() ) {
                         if(e instanceof ButtonWidget){
-                            if( ((ButtonWidget)e).getMessage().equals(new TranslatableText( "menu.returnToMenu").asString())){
+                            if( ((ButtonWidget)e).getMessage().equals(new TranslatableText( "menu.returnToMenu").getString())){
                                 if(b==null){
                                     b =(ButtonWidget)e;
                                 }
