@@ -69,6 +69,7 @@ public class Atum implements ModInitializer {
                 GLFW.GLFW_KEY_F6,
                 getTranslation("key.categories.atum","Atum").getString()
         ));
+        new File("config").mkdir();
         new File("config/atum").mkdir();
         configFile = new File("config/atum/atum.properties");
 
