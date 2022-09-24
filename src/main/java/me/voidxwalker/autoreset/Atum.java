@@ -62,6 +62,7 @@ public class Atum implements ModInitializer {
                 64,
                 getTranslation("key.categories.atum","Atum").getString()
         ));
+        new File("config").mkdir();
         new File("config/atum").mkdir();
         configFile = new File("config/atum/atum.properties");
 
